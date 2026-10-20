@@ -1,428 +1,409 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NxtSpace — Launching soon</title>
-  <meta name="description" content="NxtSpace is launching soon: tech discussions, expert webinars and hands-on research for builders and curious minds. Join the waitlist for early access." />
-  <meta name="color-scheme" content="light dark" />
-  <meta name="theme-color" content="#f5f7ff" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#0a1024" media="(prefers-color-scheme: dark)" />
-  <meta name="referrer" content="strict-origin-when-cross-origin" />
-  <meta name="robots" content="index, follow" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="NxtSpace" />
-  <meta property="og:title" content="NxtSpace — Launching soon" />
-  <meta property="og:description" content="Tech discussions, expert webinars and hands-on research. Join the waitlist for early access." />
-  <meta name="twitter:card" content="summary" />
-  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="preconnect" href="https://s.pageclip.co" crossorigin />
-  <link rel="preconnect" href="https://send.pageclip.co" crossorigin />
-  <script src="https://s.pageclip.co/v1/pageclip.js" charset="utf-8" defer></script>
-
-  <style>
-    :root {
-      --bg: #f5f7ff;
-      --surface: #ffffff;
-      --text: #121a33;
-      --muted: #566080;
-      --border: #dde3f4;
-      --primary: #3453ff;
-      --primary-2: #0b8f86;
-      --accent: #c2570f;
-      --danger: #c62828;
-      --ok: #0a7a6e;
-      --btn-from: #3453ff;
-      --btn-to: #0b7fb0;
-      --btn-text: #ffffff;
-      --shadow: 0 24px 60px rgba(30, 50, 120, 0.14);
-      --net-a: #3453ff;
-      --net-b: #00a99b;
-      color-scheme: light dark;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0a1024;
-        --surface: #141d3a;
-        --text: #eaf0ff;
-        --muted: #a6b1d6;
-        --border: #26325e;
-        --primary: #8aa0ff;
-        --primary-2: #2fe0cf;
-        --accent: #ffa05e;
-        --danger: #ff8a8f;
-        --ok: #4be3d2;
-        --btn-from: #8aa0ff;
-        --btn-to: #2fe0cf;
-        --btn-text: #08102a;
-        --shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
-        --net-a: #8aa0ff;
-        --net-b: #2fe0cf;
-      }
-    }
-
-    *, *::before, *::after { box-sizing: border-box; }
-    [hidden] { display: none !important; }
-    html { -webkit-text-size-adjust: 100%; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      min-height: 100dvh;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      line-height: 1.6;
-      color: var(--text);
-      background:
-        radial-gradient(900px 520px at 88% 0%, color-mix(in srgb, var(--primary) 20%, transparent), transparent 62%),
-        radial-gradient(700px 520px at 0% 100%, color-mix(in srgb, var(--primary-2) 18%, transparent), transparent 62%),
-        var(--bg);
-      background-attachment: fixed;
-    }
-    h1, h2, h3 { line-height: 1.12; margin: 0; letter-spacing: -0.02em; }
-    p { margin: 0; }
-    a { color: inherit; }
-    :focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; border-radius: 6px; }
-
-    #bg { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-    .skip {
-      position: absolute; left: 12px; top: -60px; z-index: 10;
-      background: var(--surface); color: var(--text); padding: 10px 14px; border-radius: 10px;
-      border: 1px solid var(--border); text-decoration: none; font-weight: 600;
-    }
-    .skip:focus { top: 12px; }
-
-    .wrap { position: relative; z-index: 1; width: min(1120px, 100% - 40px); margin-inline: auto; padding: 28px 0 40px; min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
-    .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-    .logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.2rem; letter-spacing: -0.01em; text-decoration: none; }
-    .logo svg { width: 34px; height: 34px; flex: none; }
-    .logo span span { color: var(--muted); font-weight: 500; }
-
-    main { flex: 1; display: grid; align-items: center; gap: 44px; padding: 48px 0 32px; grid-template-columns: 1fr; }
-    @media (min-width: 940px) { main { grid-template-columns: 1.15fr 0.85fr; gap: 64px; } }
-
-    .badge {
-      display: inline-flex; align-items: center; gap: 9px;
-      padding: 6px 14px; border-radius: 999px; font-size: 0.86rem; font-weight: 600;
-      background: var(--surface); border: 1px solid var(--border); color: var(--muted);
-    }
-    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary-2); animation: pulse 2s infinite; }
-    h1 { font-size: clamp(2.5rem, 7vw, 4.6rem); margin: 22px 0 18px; }
-    .grad { background: linear-gradient(120deg, var(--primary), var(--primary-2) 62%, var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .lead { font-size: clamp(1.05rem, 2.2vw, 1.25rem); color: var(--muted); max-width: 34em; }
-
-    .perks { list-style: none; margin: 30px 0 0; padding: 0; display: grid; gap: 14px; max-width: 34em; }
-    .perks li { display: flex; gap: 14px; align-items: flex-start; }
-    .perk-ico { flex: none; width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: var(--surface); border: 1px solid var(--border); color: var(--primary); }
-    .perk-ico svg { width: 22px; height: 22px; }
-    .perks b { display: block; font-size: 1rem; }
-    .perks small { color: var(--muted); font-size: 0.93rem; }
-
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 34px 30px; box-shadow: var(--shadow); }
-    .card h2 { font-size: 1.6rem; }
-    .sub { color: var(--muted); margin: 8px 0 22px; }
-
-    form { display: grid; gap: 16px; }
-    .field { display: grid; gap: 6px; }
-    label { font-weight: 600; font-size: 0.92rem; }
-    .opt { color: var(--muted); font-weight: 400; }
-    input[type="text"], input[type="email"], select {
-      width: 100%; font: inherit; color: var(--text); background: var(--bg);
-      border: 1.5px solid var(--border); border-radius: 12px; padding: 12px 14px; min-height: 48px;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    select {
-      appearance: none; -webkit-appearance: none; padding-right: 40px;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9' fill='none' stroke='%23808aab' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l6 6 6-6'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 16px center;
-    }
-    input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 22%, transparent); }
-    .invalid input { border-color: var(--danger); }
-    .err { color: var(--danger); font-size: 0.86rem; min-height: 1.2em; }
-    .err:empty { min-height: 0; }
-    .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
-
-    .btn {
-      position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-      width: 100%; min-height: 52px; border: 0; border-radius: 999px; cursor: pointer;
-      font: 700 1.02rem/1 inherit; font-family: inherit; color: var(--btn-text);
-      background: linear-gradient(135deg, var(--btn-from), var(--btn-to));
-      box-shadow: 0 10px 26px color-mix(in srgb, var(--primary) 35%, transparent);
-      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
-    }
-    .btn:hover:not(:disabled) { transform: translateY(-2px); }
-    .btn:disabled { opacity: 0.75; cursor: progress; }
-    .spin { display: none; width: 18px; height: 18px; border-radius: 50%; border: 2.5px solid currentColor; border-right-color: transparent; animation: spin 0.8s linear infinite; }
-    .btn.loading .spin { display: inline-block; }
-
-    .status { min-height: 1.3em; font-weight: 600; text-align: center; font-size: 0.94rem; }
-    .status.error { color: var(--danger); }
-    .fine { color: var(--muted); font-size: 0.82rem; text-align: center; }
-    .devnote { padding: 10px 12px; border-radius: 10px; font-size: 0.84rem; background: color-mix(in srgb, var(--accent) 16%, transparent); border: 1px dashed var(--accent); }
-
-    .done { display: grid; gap: 10px; justify-items: center; text-align: center; padding: 10px 0; }
-    .done:focus { outline: none; }
-    .tick { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; color: var(--btn-text); background: linear-gradient(135deg, var(--btn-from), var(--btn-to)); }
-    .tick svg { width: 30px; height: 30px; }
-    .done h3 { font-size: 1.5rem; }
-    .done p { color: var(--muted); }
-    .link { background: none; border: 0; padding: 6px; font: inherit; font-weight: 600; color: var(--primary); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
-
-    footer { position: relative; z-index: 1; color: var(--muted); font-size: 0.88rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
-
-    .rise { animation: rise 0.7s ease both; }
-    .rise:nth-child(2) { animation-delay: 0.08s; } .rise:nth-child(3) { animation-delay: 0.16s; } .rise:nth-child(4) { animation-delay: 0.24s; }
-    @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--primary-2) 60%, transparent); } 70% { box-shadow: 0 0 0 10px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; transition: none !important; }
-    }
-    @media (max-width: 480px) { .card { padding: 26px 20px; } }
-  </style>
+  <title>NxTech Club — Discuss. Build. Research.</title>
+  <meta name="description" content="Join NxTech Club for technology discussions, expert webinars and hands-on tech research." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <a class="skip" href="#join">Skip to sign-up</a>
-  <canvas id="bg" aria-hidden="true"></canvas>
 
-  <div class="wrap">
-    <header class="top">
-      <a class="logo" href="./" aria-label="NxtSpace">
-        <img src="favicon.svg" alt="Company Logo" height="25">
-        <span>Nxt<span>Space</span></span>
+  <!-- NAV -->
+  <header class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="#home" class="logo" aria-label="NxTech Club home">
+        <span class="logo-mark">
+          <svg viewBox="0 0 32 32" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M11 9l-7 7 7 7"/>
+            <path d="M21 9l7 7-7 7"/>
+            <path d="M18 7l-4 18"/>
+          </svg>
+        </span>
+        <span class="logo-text">Nx<span>Tech Club</span></span>
       </a>
-    </header>
+      <nav class="nav-links" id="navLinks" aria-label="Main">
+        <a href="#perks">Perks</a>
+        <a href="#webinars">Events</a>
+        <a href="research.html">Research</a>
+        <a href="#join">Membership</a>
+        <a href="#faq">FAQ</a>
+        <a href="account.html#/login">Log in</a>
+        <a href="account.html#/register" class="btn btn-small">Join the club</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle light/dark theme">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </button>
+        <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
 
-    <main>
-      <section aria-labelledby="headline">
-        <p class="badge rise"><span class="dot" aria-hidden="true"></span> Launching soon</p>
-        <h1 id="headline" class="rise">The next big thing<br /><span class="grad">starts with NxtSpace.</span></h1>
-        <p class="lead rise">A community of builders, thinkers and researchers who debate where technology is heading, learn from industry experts, and turn ideas into real tech research.</p>
-        <ul class="perks rise">
-          <li>
-            <span class="perk-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a3 3 0 0 1-3 3H8l-5 4V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3z"/></svg></span>
-            <span><b>Tech discussions</b><small>Weekly talks, debates and paper circles.</small></span>
+  <main id="home">
+
+    <!-- HERO -->
+    <section class="hero">
+      <canvas id="network" aria-hidden="true"></canvas>
+      <div class="container hero-inner">
+        <p class="eyebrow reveal"><span class="dot"></span> Now open for the 2026–27 batch</p>
+        <h1 class="reveal">The next big thing<br /><span class="grad">starts with NxTech.</span></h1>
+        <p class="lead reveal">A community of builders, thinkers and researchers who debate where technology is heading, learn from industry experts, and turn ideas into real tech research.</p>
+        <div class="hero-cta reveal">
+          <a href="account.html#/register" class="btn">Become a member</a>
+          <a href="#perks" class="btn btn-ghost">Explore the perks</a>
+        </div>
+        <ul class="hero-tags reveal" aria-label="Areas we cover">
+          <li>AI &amp; ML</li><li>Cybersecurity</li><li>Web &amp; Apps</li><li>IoT &amp; Robotics</li><li>Cloud</li><li>Data Science</li><li>Open Source</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats">
+      <div class="container stats-grid">
+        <div class="stat reveal"><strong data-count="450" data-suffix="+">0</strong><span>Active members</span></div>
+        <div class="stat reveal"><strong data-count="60" data-suffix="+">0</strong><span>Tech discussions a year</span></div>
+        <div class="stat reveal"><strong data-count="35" data-suffix="">0</strong><span>Expert webinars</span></div>
+        <div class="stat reveal"><strong data-count="18" data-suffix="">0</strong><span>Research projects</span></div>
+      </div>
+    </section>
+
+    <!-- PERKS -->
+    <section class="section" id="perks">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Why join</p>
+          <h2>Three ways NxTech levels up your tech journey</h2>
+          <p>Pick a pillar to see exactly what you get as a member.</p>
+        </div>
+
+        <div class="tabs reveal" role="tablist" aria-label="Member perks">
+          <button class="tab active" role="tab" aria-selected="true" aria-controls="panel-discuss" id="tab-discuss" data-tab="discuss">
+            <span class="tab-ico">💬</span> Tech Discussions
+          </button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="panel-webinar" id="tab-webinar" data-tab="webinar" tabindex="-1">
+            <span class="tab-ico">🎓</span> Webinars
+          </button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="panel-research" id="tab-research" data-tab="research" tabindex="-1">
+            <span class="tab-ico">🔬</span> Tech Research
+          </button>
+        </div>
+
+        <div class="panels">
+          <!-- Discussions -->
+          <div class="panel active" id="panel-discuss" role="tabpanel" aria-labelledby="tab-discuss">
+            <div class="panel-intro">
+              <h3>Debate the future of technology with people who push back</h3>
+              <p>Weekly sessions and a members-only community where ideas get tested, not just admired. Sharpen your thinking on AI, security, open source and everything in between.</p>
+            </div>
+            <div class="cards">
+              <article class="card">
+                <div class="card-ico">🗓️</div>
+                <h4>Weekly Tech Talks</h4>
+                <p>Open-floor sessions on the latest tools, trends and breakthroughs.</p>
+              </article>
+              <article class="card">
+                <div class="card-ico">⚖️</div>
+                <h4>Structured Debates</h4>
+                <p>Argue assigned sides on topics like AI ethics, privacy and open vs closed source.</p>
+              </article>
+              <article class="card">
+                <div class="card-ico">📄</div>
+                <h4>Paper &amp; Blog Circles</h4>
+                <p>Break down influential papers and engineering write-ups together.</p>
+              </article>
+              <article class="card">
+                <div class="card-ico">🌐</div>
+                <h4>Members-only Community</h4>
+                <p>Ask for help, share projects and get feedback any day of the week.</p>
+              </article>
+            </div>
+          </div>
+
+          <!-- Webinars -->
+          <div class="panel" id="panel-webinar" role="tabpanel" aria-labelledby="tab-webinar" hidden>
+            <div class="panel-intro">
+              <h3>Learn directly from people building real technology</h3>
+              <p>Live, interactive webinars with engineers, founders and researchers — with time reserved for your questions, and recordings if you miss one.</p>
+            </div>
+            <div class="cards">
+              <article class="card">
+                <div class="card-ico">🎙️</div>
+                <h4>Industry Expert Talks</h4>
+                <p>Monthly sessions with engineers, researchers and startup founders.</p>
+              </article>
+              <article class="card">
+                <div class="card-ico">❓</div>
+                <h4>Live Q&amp;A</h4>
+                <p>Ask about careers, tech stacks and how things work in the real world.</p>
+              </article>
+              <article class="card">
+                <div class="card-ico">📼</div>
+                <h4>Recording Library</h4>
+                <p>Rewatch any past webinar with slides and resource lists attached.</p>
+              </article>
+              <article class="card">
+                <div class="card-ico">📜</div>
+                <h4>Participation Certificates</h4>
+                <p>Earn certificates that strengthen your resume and applications.</p>
+              </article>
+            </div>
+          </div>
+
+          <!-- Research -->
+          <div class="panel" id="panel-research" role="tabpanel" aria-labelledby="tab-research" hidden>
+            <div class="panel-intro">
+              <h3>Go from idea to prototype to publication</h3>
+              <p>Join small project teams, learn the full research and build cycle, and get mentored by senior members and faculty advisors.</p>
+            </div>
+            <div class="cards">
+              <article class="card">
+                <div class="card-ico">🧪</div>
+                <h4>Hands-on Projects</h4>
+                <p>Real problems in AI, IoT, security and software — built and tested by teams.</p>
+              </article>
+              <article class="card">
+                <div class="card-ico">🧭</div>
+                <h4>1-on-1 Mentorship</h4>
+                <p>Get paired with a mentor to guide your design, code and analysis.</p>
+              </article>
+              <article class="card">
+                <div class="card-ico">🏆</div>
+                <h4>Publish &amp; Compete</h4>
+                <p>Support to write papers, enter hackathons and present at tech conferences.</p>
+              </article>
+              <article class="card">
+                <div class="card-ico">🧰</div>
+                <h4>Tools &amp; Resources</h4>
+                <p>Guides for GitHub workflows, datasets, cloud labs, LaTeX and literature search.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EVENTS -->
+    <section class="section alt" id="webinars">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Coming up</p>
+          <h2>Upcoming webinars &amp; discussions</h2>
+          <p>Sample schedule — edit these in <code>index.html</code> with your real events.</p>
+        </div>
+        <ul class="events">
+          <li class="event reveal">
+            <div class="date"><b>07</b><span>Nov</span></div>
+            <div class="event-body">
+              <h4>Building with Generative AI: Beyond the Hype</h4>
+              <p>Webinar · 6:00 PM IST · Guest: ML engineer</p>
+            </div>
+            <span class="badge b-webinar">Webinar</span>
           </li>
-          <li>
-            <span class="perk-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="13" height="14" rx="3"/><path d="m16 10 5-3v10l-5-3"/></svg></span>
-            <span><b>Expert webinars</b><small>Live sessions with engineers, founders and researchers.</small></span>
+          <li class="event reveal">
+            <div class="date"><b>14</b><span>Nov</span></div>
+            <div class="event-body">
+              <h4>Tech Talk: Is Open Source Sustainable?</h4>
+              <p>Discussion · 5:30 PM IST · Open to all members</p>
+            </div>
+            <span class="badge b-discuss">Discussion</span>
           </li>
-          <li>
-            <span class="perk-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6L4.5 19a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 9V3"/><path d="M7.5 15h9"/></svg></span>
-            <span><b>Hands-on research</b><small>Mentored projects from first idea to prototype.</small></span>
+          <li class="event reveal">
+            <div class="date"><b>21</b><span>Nov</span></div>
+            <div class="event-body">
+              <h4>From Idea to Paper: Starting Your First Tech Research</h4>
+              <p>Workshop · 4:00 PM IST · Research track kickoff</p>
+            </div>
+            <span class="badge b-research">Research</span>
+          </li>
+          <li class="event reveal">
+            <div class="date"><b>05</b><span>Dec</span></div>
+            <div class="event-body">
+              <h4>Debate Night: Should AI Write Our Code?</h4>
+              <p>Discussion · 6:30 PM IST · Audience vote at the end</p>
+            </div>
+            <span class="badge b-discuss">Discussion</span>
           </li>
         </ul>
-      </section>
+      </div>
+    </section>
 
-      <section id="join" class="card rise" aria-labelledby="joinTitle">
-        <div id="formWrap">
-          <h2 id="joinTitle">Get early access</h2>
-          <p class="sub">Join the waitlist and we'll email you once, when the doors open.</p>
-
-          <form id="waitlist" action="https://send.pageclip.co/5USw4FUdiFlrL7zjUREZGO8jHEV0Sqf6/nxtspace-waitlist" method="post" accept-charset="utf-8">
-            <div class="field">
-              <label for="email">Email address</label>
-              <input id="email" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" maxlength="254" required placeholder="you@example.com" aria-describedby="email-err" />
-              <p class="err" id="email-err" role="alert"></p>
-            </div>
-            <div class="field">
-              <label for="name">Name <span class="opt">(optional)</span></label>
-              <input id="name" name="name" type="text" autocomplete="name" maxlength="80" placeholder="Your name" />
-            </div>
-            <div class="field">
-              <label for="interest">What excites you most? <span class="opt">(optional)</span></label>
-              <select id="interest" name="interest">
-                <option value="">Choose one…</option>
-                <option>Tech discussions</option>
-                <option>Expert webinars</option>
-                <option>Hands-on research</option>
-                <option>All of it</option>
-              </select>
-            </div>
-            <input type="hidden" name="source" value="launching-soon" />
-            <!-- Spam trap: hidden from people, tempting to bots. Intentionally has no name so it is never sent. -->
-            <div class="hp" aria-hidden="true"><label>Leave this field empty <input id="hp" type="text" tabindex="-1" autocomplete="off" /></label></div>
-
-            <button class="btn" id="submitBtn" type="submit"><span class="spin" aria-hidden="true"></span><span id="btnLabel">Notify me</span></button>
-            <p class="status" id="formStatus" role="status" aria-live="polite"></p>
-            <p class="devnote" id="devNote" hidden>Developer note: add your Pageclip key to the form's action URL (see the comment above the form). This message only appears on localhost.</p>
-            <p class="fine">We'll only use your email to tell you when NxtSpace launches. No spam.</p>
-          </form>
+    <!-- RESEARCH -->
+    <section class="section" id="research">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Research tracks</p>
+          <h2>Projects you can join this term</h2>
+          <p>Each team has a mentor, a clear goal and a timeline. <a class="text-link" href="research.html">See all research →</a></p>
         </div>
-
-        <div class="done" id="done" role="status" tabindex="-1" hidden>
-          <div class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
-          <h3>You're on the list!</h3>
-          <p id="doneText">We'll email you as soon as NxtSpace opens its doors.</p>
-          <button type="button" class="link" id="again">Sign up another email</button>
+        <div class="projects">
+          <article class="project reveal">
+            <span class="chip">IoT &amp; Embedded</span>
+            <h4>Smart Campus Energy Monitor</h4>
+            <p>Build sensor nodes that track power use across buildings and visualise it live.</p>
+            <div class="progress" aria-label="Project progress 70%"><i style="--w:70%"></i></div>
+            <small>70% complete · 6 members</small>
+          </article>
+          <article class="project reveal">
+            <span class="chip">AI &amp; ML</span>
+            <h4>Low-resource Language Chatbot</h4>
+            <p>Fine-tune small language models to support regional languages with limited data.</p>
+            <div class="progress" aria-label="Project progress 45%"><i style="--w:45%"></i></div>
+            <small>45% complete · 5 members</small>
+          </article>
+          <article class="project reveal">
+            <span class="chip">Cybersecurity</span>
+            <h4>Student App Vulnerability Scanner</h4>
+            <p>Create a tool that checks campus web apps for common security misconfigurations.</p>
+            <div class="progress" aria-label="Project progress 85%"><i style="--w:85%"></i></div>
+            <small>85% complete · 4 members</small>
+          </article>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
 
-    <footer>
-      <span>© <span id="year">2026</span> NxtSpace. All rights reserved.</span>
-      <span>Discuss. Build. Research.</span>
-    </footer>
-  </div>
+    <!-- HOW -->
+    <section class="section alt" id="how">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Getting started</p>
+          <h2>Joining takes four simple steps</h2>
+        </div>
+        <ol class="steps">
+          <li class="step reveal"><span>1</span><h4>Create an account</h4><p>Sign up in under a minute.</p></li>
+          <li class="step reveal"><span>2</span><h4>Say hello</h4><p>Attend an orientation and meet the team.</p></li>
+          <li class="step reveal"><span>3</span><h4>Choose a plan</h4><p>Stay on Free, or go paid for full access.</p></li>
+          <li class="step reveal"><span>4</span><h4>Start building</h4><p>Contribute, ask, code and grow.</p></li>
+        </ol>
+      </div>
+    </section>
 
-  <script>
-  (function () {
-    "use strict";
-    var $ = function (id) { return document.getElementById(id); };
+    <!-- VOICES -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Member voices</p>
+          <h2>What members say</h2>
+          <p>Sample testimonials — replace with real ones.</p>
+        </div>
+        <div class="quotes">
+          <figure class="quote reveal">
+            <blockquote>I came for the webinars and stayed for the debates. I've never learned so much so quickly.</blockquote>
+            <figcaption><b>Ananya R.</b> · Computer Science, 2nd year</figcaption>
+          </figure>
+          <figure class="quote reveal">
+            <blockquote>My mentor helped me turn a rough idea into a working prototype and a poster for a student conference.</blockquote>
+            <figcaption><b>Rahul M.</b> · Electronics, 3rd year</figcaption>
+          </figure>
+          <figure class="quote reveal">
+            <blockquote>Paper circles taught me how to actually read research — critically, not passively.</blockquote>
+            <figcaption><b>Sneha P.</b> · Information Technology, 1st year</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
 
-    /* ---------- footer year ---------- */
-    var yr = $("year"); if (yr) yr.textContent = new Date().getFullYear();
+    <!-- FAQ -->
+    <section class="section alt" id="faq">
+      <div class="container narrow">
+        <div class="section-head reveal">
+          <p class="kicker">Questions</p>
+          <h2>Frequently asked</h2>
+        </div>
+        <div class="faq">
+          <details class="reveal" open>
+            <summary>Do I need to know how to code to join?</summary>
+            <p>No. Curiosity is the only requirement. We have beginners and experts, and beginner-friendly tracks in each pillar.</p>
+          </details>
+          <details class="reveal">
+            <summary>Is there a membership fee?</summary>
+            <p>Creating an account is free. After you sign up you can stay on the free read-only membership, or choose a paid Annual or Lifetime plan from your dashboard — <a class="text-link" href="#join">see what each includes</a>.</p>
+          </details>
+          <details class="reveal">
+            <summary>How much time does it take?</summary>
+            <p>Most members spend 2–4 hours a week. Research tracks need a bit more; discussions and webinars are drop-in.</p>
+          </details>
+          <details class="reveal">
+            <summary>Can I attend webinars online?</summary>
+            <p>Yes. All webinars are live online with recordings available afterwards for members.</p>
+          </details>
+        </div>
+      </div>
+    </section>
 
-    /* ---------- background network (decorative) ---------- */
-    (function () {
-      var canvas = $("bg"), ctx = canvas && canvas.getContext && canvas.getContext("2d");
-      if (!ctx) return;
-      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-      var W = 0, H = 0, nodes = [], raf = 0, running = false, timer = 0;
-      var cssVar = function (n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim() || "#3453ff"; };
-      var colA = cssVar("--net-a"), colB = cssVar("--net-b");
+    <!-- MEMBERSHIP -->
+    <section class="section join" id="join">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Membership</p>
+          <h2>Memberships, when you're ready</h2>
+          <p>Sign up first, it's quick. Then choose a plan from your dashboard: start free and read along, or go paid for full participation.</p>
+        </div>
+        <div class="plans plans-mini">
+          <article class="plan reveal">
+            <span class="plan-name">Free</span>
+            <span class="plan-sub">Read-only access</span>
+            <span class="price"><b>₹0</b><small>forever</small></span>
+            <ul>
+              <li>Read discussions &amp; research summaries</li>
+              <li>Selected webinar recordings</li>
+              <li class="no">Posting, live events, projects</li>
+            </ul>
+          </article>
+          <article class="plan reveal">
+            <span class="plan-name">Paid · Annual</span>
+            <span class="plan-sub">Full participation</span>
+            <span class="price"><b>₹499</b><small>per year</small></span>
+            <ul>
+              <li>Post &amp; join all discussions</li>
+              <li>Live webinars &amp; research teams</li>
+              <li>Mentorship &amp; certificates</li>
+            </ul>
+          </article>
+          <article class="plan featured reveal">
+            <span class="plan-tag">Best value</span>
+            <span class="plan-name">Paid · Lifetime</span>
+            <span class="plan-sub">Pay once, stay forever</span>
+            <span class="price"><b>₹1,499</b><small>one-time</small></span>
+            <ul>
+              <li>Everything in Annual, no renewals</li>
+              <li>Lead projects &amp; vote on decisions</li>
+              <li>Early access to events</li>
+            </ul>
+          </article>
+        </div>
+        <div class="join-cta reveal">
+          <a href="account.html#/register" class="btn">Create your account</a>
+          <p class="price-note">No plan needed to sign up. Paid plans are activated after payment. Prices shown are sample values.</p>
+        </div>
+      </div>
+    </section>
+  </main>
 
-      function build() {
-        var dpr = Math.min(window.devicePixelRatio || 1, 2);
-        W = window.innerWidth; H = window.innerHeight;
-        canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        var n = Math.max(18, Math.min(Math.floor((W * H) / 17000), 70));
-        nodes = [];
-        for (var i = 0; i < n; i++) nodes.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3, r: Math.random() * 1.8 + 0.9 });
-      }
-      function draw() {
-        ctx.clearRect(0, 0, W, H);
-        var max = 130, i, j, a, b, d;
-        for (i = 0; i < nodes.length; i++) {
-          a = nodes[i];
-          for (j = i + 1; j < nodes.length; j++) {
-            b = nodes[j]; d = Math.hypot(a.x - b.x, a.y - b.y);
-            if (d < max) { ctx.globalAlpha = (1 - d / max) * 0.28; ctx.strokeStyle = colA; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
-          }
-        }
-        ctx.globalAlpha = 0.7;
-        for (i = 0; i < nodes.length; i++) { ctx.fillStyle = i % 3 ? colA : colB; ctx.beginPath(); ctx.arc(nodes[i].x, nodes[i].y, nodes[i].r, 0, 6.2832); ctx.fill(); }
-        ctx.globalAlpha = 1;
-      }
-      function frame() {
-        for (var i = 0; i < nodes.length; i++) {
-          var n = nodes[i]; n.x += n.vx; n.y += n.vy;
-          if (n.x < 0 || n.x > W) n.vx *= -1;
-          if (n.y < 0 || n.y > H) n.vy *= -1;
-        }
-        draw();
-        raf = requestAnimationFrame(frame);
-      }
-      function start() { if (running || reduce.matches || document.hidden) return; running = true; raf = requestAnimationFrame(frame); }
-      function stop() { running = false; cancelAnimationFrame(raf); }
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <a href="#home" class="logo"><span class="logo-text">Nx<span>Tech Club</span></span></a>
+        <p class="muted">Discuss. Build. Research.</p>
+      </div>
+      <div class="foot-links">
+        <a href="#perks">Perks</a>
+        <a href="#webinars">Events</a>
+        <a href="research.html">Research</a>
+        <a href="account.html#/register">Join</a>
+      </div>
+      <p class="muted">© <span id="year"></span> NxTech Club. All rights reserved.</p>
+    </div>
+  </footer>
 
-      build(); draw(); start();
-      document.addEventListener("visibilitychange", function () { if (document.hidden) stop(); else start(); });
-      window.addEventListener("resize", function () { clearTimeout(timer); timer = setTimeout(function () { build(); draw(); }, 200); });
-      if (window.matchMedia) {
-        var dark = window.matchMedia("(prefers-color-scheme: dark)");
-        var onTheme = function () { colA = cssVar("--net-a"); colB = cssVar("--net-b"); draw(); };
-        if (dark.addEventListener) dark.addEventListener("change", onTheme);
-      }
-    })();
+  <button class="to-top" id="toTop" aria-label="Back to top">↑</button>
 
-    /* ---------- waitlist form ---------- */
-    document.addEventListener("DOMContentLoaded", function () {
-      var form = $("waitlist"), formWrap = $("formWrap"), done = $("done"), doneText = $("doneText");
-      var emailEl = $("email"), hp = $("hp"), btn = $("submitBtn"), btnLabel = $("btnLabel"), statusEl = $("formStatus");
-      var STORE = "nxtspace:waitlist-joined";
-      var ACTION_RE = /^https:\/\/send\.pageclip\.co\/[A-Za-z0-9_]{32}\/[^\/?#]+$/;
-      var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-      var configured = ACTION_RE.test(form.getAttribute("action") || "");
-      var sentEmail = "";
-
-      form.noValidate = true; // we show our own, accessible messages
-
-      var host = location.hostname;
-      var isLocal = location.protocol === "file:" || host === "localhost" || host === "127.0.0.1" || host === "[::1]";
-      if (!configured) {
-        console.error("[NxtSpace] The Pageclip key is not set. Edit the form's action URL in index.html (see the PAGECLIP SETUP comment). Sign-ups are disabled until then.");
-        if (isLocal) $("devNote").hidden = false;
-      }
-
-      function remember(flag) { try { if (flag) localStorage.setItem(STORE, "1"); else localStorage.removeItem(STORE); } catch (e) { /* storage unavailable */ } }
-      function remembered() { try { return localStorage.getItem(STORE) === "1"; } catch (e) { return false; } }
-
-      function setStatus(msg, kind) { statusEl.textContent = msg || ""; statusEl.className = "status" + (kind ? " " + kind : ""); }
-      function fieldError(input, msg) {
-        $(input.id + "-err").textContent = msg || "";
-        input.setAttribute("aria-invalid", msg ? "true" : "false");
-        input.closest(".field").classList.toggle("invalid", !!msg);
-      }
-      function setBusy(on) {
-        btn.disabled = on; btn.classList.toggle("loading", on);
-        btnLabel.textContent = on ? "Joining…" : "Notify me";
-        form.setAttribute("aria-busy", on ? "true" : "false");
-      }
-      function reenable() { for (var i = 0; i < form.elements.length; i++) form.elements[i].disabled = false; }
-
-      function showDone(email, silent, noFocus) {
-        formWrap.hidden = true;
-        doneText.textContent = email ? "We'll email " + email + " as soon as NxtSpace opens its doors." : "We'll email you as soon as NxtSpace opens its doors.";
-        done.hidden = false;
-        if (!noFocus) done.focus();
-        if (!silent) remember(true);
-      }
-      function showForm() {
-        remember(false);
-        done.hidden = true; formWrap.hidden = false;
-        form.reset(); setBusy(false); reenable(); setStatus(""); fieldError(emailEl);
-        emailEl.focus();
-      }
-      $("again").addEventListener("click", showForm);
-
-      function validate() {
-        var email = emailEl.value.trim(), msg = "";
-        if (!email) msg = "Please enter your email address.";
-        else if (!EMAIL_RE.test(email)) msg = "That email doesn't look right. Please check it.";
-        fieldError(emailEl, msg);
-        if (msg) emailEl.focus();
-        return !msg;
-      }
-
-      /* Runs before anything is sent. Return false to cancel. */
-      function preflight() {
-        setStatus("");
-        if (!validate()) return false;
-        if (hp.value) { showDone(emailEl.value.trim(), true); return false; } // bot: pretend it worked, send nothing
-        if (!configured) { setStatus("Sign-ups are temporarily unavailable. Please try again soon.", "error"); return false; }
-        sentEmail = emailEl.value.trim();
-        setBusy(true);
-        return true;
-      }
-
-      function onResponse(error) {
-        setBusy(false);
-        if (error) {
-          console.error("[NxtSpace] Pageclip could not save the sign-up:", error);
-          setStatus("Something went wrong and we couldn't save your sign-up. Please try again.", "error");
-          reenable(); setTimeout(reenable, 350); // Pageclip restores its own state shortly after a response
-          return false;
-        }
-        showDone(sentEmail);
-        return false; // we show our own confirmation
-      }
-
-      var bound = false;
-      if (configured && window.Pageclip && typeof window.Pageclip.form === "function") {
-        try {
-          window.Pageclip.form(form, { onSubmit: preflight, onResponse: onResponse });
-          bound = true;
-        } catch (e) { console.error("[NxtSpace] Pageclip could not attach to the form:", e); }
-      }
-      if (!bound) {
-        // Pageclip's script is unavailable (blocked or offline): validate, then let the browser post the form directly.
-        form.addEventListener("submit", function (e) { if (!preflight()) e.preventDefault(); });
-      }
-
-      emailEl.addEventListener("input", function () { if (emailEl.getAttribute("aria-invalid") === "true") validate(); });
-      if (remembered()) showDone("", true, true);
-    });
-  })();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>

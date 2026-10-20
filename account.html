@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Log in or create an account — NxTech Club</title>
+  <meta name="description" content="Log in to or create your NxTech Club account." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="account">
+
+  <header class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo" aria-label="NxTech Club home">
+        <span class="logo-mark">
+          <svg viewBox="0 0 32 32" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M11 9l-7 7 7 7"/><path d="M21 9l7 7-7 7"/><path d="M18 7l-4 18"/>
+          </svg>
+        </span>
+        <span class="logo-text">Nx<span>Tech Club</span></span>
+      </a>
+      <nav class="nav-links" id="navLinks" aria-label="Main">
+        <a href="index.html#perks">Perks</a>
+        <a href="index.html#webinars">Events</a>
+        <a href="research.html">Research</a>
+        <a href="index.html#join">Membership</a>
+        <a href="index.html#faq">FAQ</a>
+        <a href="account.html#/login">Log in</a>
+        <a href="account.html#/register" class="btn btn-small">Join the club</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle light/dark theme">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </button>
+        <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="auth-main" id="app">
+
+    <!-- Checking session / finishing sign-in -->
+    <section class="auth-card center" data-view="loading">
+      <div class="spinner" role="status" aria-label="Loading"></div>
+      <h1 tabindex="-1">One moment…</h1>
+      <p class="muted">Checking your session.</p>
+    </section>
+
+    <!-- LOG IN -->
+    <section class="auth-card" data-view="login" hidden>
+      <nav class="seg" aria-label="Account">
+        <a href="#/login" data-seg="login">Log in</a>
+        <a href="#/register" data-seg="register">Create account</a>
+      </nav>
+      <h1 tabindex="-1">Welcome back</h1>
+      <p class="muted">Log in to your NxTech Club account.</p>
+      <form class="auth-form" data-form="login" novalidate>
+        <div class="field">
+          <label for="loginEmail">Email address</label>
+          <input type="email" id="loginEmail" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required />
+          <small class="hint">We’ll use this to continue to secure email verification.</small>
+          <small class="err" role="alert"></small>
+        </div>
+        <button type="submit" class="btn btn-block">Log in</button>
+      </form>
+      <p class="switch">New to NxTech? <a class="text-link" href="#/register">Create an account</a></p>
+      <p class="secure">🔒 Secure sign-in is handled by Kinde. We never see your password.</p>
+    </section>
+
+    <!-- REGISTER -->
+    <section class="auth-card" data-view="register" hidden>
+      <nav class="seg" aria-label="Account">
+        <a href="#/login" data-seg="login">Log in</a>
+        <a href="#/register" data-seg="register">Create account</a>
+      </nav>
+      <h1 tabindex="-1">Create your account</h1>
+      <p class="muted">It takes about a minute. You don't need to pick a plan now — you can choose one from your dashboard once you're in.</p>
+      <form class="auth-form" data-form="register" novalidate>
+        <div class="field">
+          <label for="registerEmail">Email address</label>
+          <input type="email" id="registerEmail" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required />
+          <small class="hint">We’ll use this to continue to secure email verification.</small>
+          <small class="err" role="alert"></small>
+        </div>
+        <button type="submit" class="btn btn-block">Create account</button>
+      </form>
+      <ol class="mini-steps" aria-label="What happens next">
+        <li><b>Sign up</b> with your email.</li>
+        <li><b>Open your dashboard</b> to see your account.</li>
+        <li><b>Choose a plan</b> if you want one — Free or paid.</li>
+      </ol>
+      <p class="switch">Already a member? <a class="text-link" href="#/login">Log in</a></p>
+      <p class="secure">🔒 Secure sign-up is handled by Kinde.</p>
+    </section>
+
+    <!-- DASHBOARD (placeholder until plans & payment are added) -->
+    <section class="auth-card dash" data-view="dashboard" hidden>
+      <div class="dash-head">
+        <span class="avatar" id="avatar" aria-hidden="true"></span>
+        <div>
+          <h1 tabindex="-1">Welcome, <span id="dashName"></span></h1>
+          <p class="muted" id="dashEmail"></p>
+        </div>
+      </div>
+      <p class="notice ok" id="dashNote" role="status" hidden></p>
+
+      <div class="dash-block">
+        <div class="dash-row">
+          <h2>Membership</h2>
+          <span class="badge b-discuss">No plan yet</span>
+        </div>
+        <p>Your account is ready. Choosing a plan is optional: Free is read-only, and paid plans unlock discussions, webinars and research teams once payment is complete.</p>
+        <p class="muted small">Plan selection and payment are coming to this dashboard next.</p>
+        <a class="text-link" href="index.html#join">See what each membership includes →</a>
+      </div>
+
+      <ol class="next-list" aria-label="What's next">
+        <li class="done"><span>✓</span><div><b>Account created</b><small>You're signed in.</small></div></li>
+        <li><span>2</span><div><b>Choose a plan</b><small>Optional. Free or paid.</small></div></li>
+        <li><span>3</span><div><b>Pay for a paid plan</b><small>Paid plans are activated after payment.</small></div></li>
+        <li><span>4</span><div><b>Unlock perks &amp; the member portal</b><small>Discussions, webinars and research teams.</small></div></li>
+      </ol>
+
+      <button type="button" class="btn btn-ghost btn-small" id="logoutBtn">Log out</button>
+    </section>
+
+    <!-- SOMETHING WENT WRONG -->
+    <section class="auth-card center" data-view="error" hidden>
+      <div class="state-ico" aria-hidden="true">⚠️</div>
+      <h1 tabindex="-1">We couldn't sign you in</h1>
+      <p id="errorMsg" class="muted" role="alert"></p>
+      <p class="small muted" id="errorDetail" hidden></p>
+      <button type="button" class="btn" id="retryBtn">Try again</button>
+    </section>
+
+    <!-- NOT SET UP YET (shown only to whoever runs the site) -->
+    <section class="auth-card" data-view="setup" hidden>
+      <div class="state-ico" aria-hidden="true">🛠️</div>
+      <h1 tabindex="-1">Finish connecting Kinde</h1>
+      <p id="setupMsg" class="muted"></p>
+      <ol class="setup-steps" id="setupSteps">
+        <li>In your Kinde application settings, enable <b>Use your own sign-up and sign-in screens</b>, then save.</li>
+        <li>In <b>Settings → Environment → Authentication</b>, open your email authentication method and copy its <b>Connection ID</b>.</li>
+        <li>Add that value as <code>emailConnectionId</code> in <code>kinde-config.js</code>, alongside your existing Client ID and domain.</li>
+        <li>Add this address to both <b>Allowed callback URLs</b> and <b>Allowed logout redirect URLs</b>:
+          <code class="copy-line" id="setupUrl"></code></li>
+      </ol>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <a href="index.html" class="logo"><span class="logo-text">Nx<span>Tech Club</span></span></a>
+        <p class="muted">Discuss. Build. Research.</p>
+      </div>
+      <div class="foot-links">
+        <a href="index.html#perks">Perks</a>
+        <a href="index.html#webinars">Events</a>
+        <a href="research.html">Research</a>
+        <a href="account.html#/register">Join</a>
+      </div>
+      <p class="muted">© <span id="year"></span> NxTech Club. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="kinde-config.js"></script>
+  <script src="kinde-auth-pkce-js.umd.min.js"></script>
+  <script src="script.js"></script>
+  <script src="account.js"></script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Research — NxTech Club</title>
+  <meta name="description" content="Explore NxTech Club's research projects in AI, IoT, cybersecurity, web and data science." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo" aria-label="NxTech Club home">
+        <span class="logo-mark">
+          <svg viewBox="0 0 32 32" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M11 9l-7 7 7 7"/><path d="M21 9l7 7-7 7"/><path d="M18 7l-4 18"/>
+          </svg>
+        </span>
+        <span class="logo-text">Nx<span>Tech Club</span></span>
+      </a>
+      <nav class="nav-links" id="navLinks" aria-label="Main">
+        <a href="index.html#perks">Perks</a>
+        <a href="index.html#webinars">Events</a>
+        <a href="research.html" class="active" aria-current="page">Research</a>
+        <a href="index.html#join">Membership</a>
+        <a href="index.html#faq">FAQ</a>
+        <a href="account.html#/login">Log in</a>
+        <a href="account.html#/register" class="btn btn-small">Join the club</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle light/dark theme">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </button>
+        <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- PAGE HERO -->
+    <section class="page-hero">
+      <canvas id="network" aria-hidden="true"></canvas>
+      <div class="container page-hero-inner">
+        <p class="eyebrow reveal"><span class="dot"></span> Research at NxTech</p>
+        <h1 class="reveal">Questions worth <span class="grad">building answers to.</span></h1>
+        <p class="lead reveal">Member-led teams exploring AI, IoT, security, web and data — from first idea to prototype to publication.</p>
+      </div>
+    </section>
+
+    <!-- ACCESS NOTE -->
+    <section class="access-note">
+      <div class="container access-inner reveal">
+        <div><b>🔓 Free members</b> can read project summaries and public reports.</div>
+        <div><b>⭐ Paid members</b> can join teams, get mentorship and co-author papers.</div>
+        <a href="index.html#join" class="btn btn-small">Compare memberships</a>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="section" id="projects">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Projects</p>
+          <h2>Current &amp; past research</h2>
+          <p>Sample projects — replace with your club's real work.</p>
+        </div>
+
+        <div class="filters reveal" role="group" aria-label="Filter projects by area">
+          <button class="filter active" data-filter="all" aria-pressed="true">All</button>
+          <button class="filter" data-filter="ai" aria-pressed="false">AI &amp; ML</button>
+          <button class="filter" data-filter="iot" aria-pressed="false">IoT &amp; Embedded</button>
+          <button class="filter" data-filter="security" aria-pressed="false">Cybersecurity</button>
+          <button class="filter" data-filter="web" aria-pressed="false">Web &amp; Apps</button>
+          <button class="filter" data-filter="data" aria-pressed="false">Data Science</button>
+        </div>
+        <p class="result-count" id="resultCount" role="status" aria-live="polite"></p>
+
+        <div class="projects" id="projectGrid">
+          <article class="project reveal" data-cat="iot">
+            <div class="project-top"><span class="chip">IoT &amp; Embedded</span><span class="status s-progress">In progress</span></div>
+            <h4>Smart Campus Energy Monitor</h4>
+            <p>Sensor nodes that track power use across buildings and visualise it live.</p>
+            <div class="stack"><i>ESP32</i><i>MQTT</i><i>Grafana</i></div>
+            <div class="progress" aria-label="Progress 70%"><i style="--w:70%"></i></div>
+            <small>70% complete · 6 members</small>
+          </article>
+
+          <article class="project reveal" data-cat="ai">
+            <div class="project-top"><span class="chip">AI &amp; ML</span><span class="status s-progress">In progress</span></div>
+            <h4>Low-resource Language Chatbot</h4>
+            <p>Fine-tuning small language models to support regional languages with limited data.</p>
+            <div class="stack"><i>Python</i><i>PyTorch</i><i>Hugging Face</i></div>
+            <div class="progress" aria-label="Progress 45%"><i style="--w:45%"></i></div>
+            <small>45% complete · 5 members</small>
+          </article>
+
+          <article class="project reveal" data-cat="security">
+            <div class="project-top"><span class="chip">Cybersecurity</span><span class="status s-progress">In progress</span></div>
+            <h4>Student App Vulnerability Scanner</h4>
+            <p>A tool that checks campus web apps for common security misconfigurations.</p>
+            <div class="stack"><i>Python</i><i>OWASP</i><i>Docker</i></div>
+            <div class="progress" aria-label="Progress 85%"><i style="--w:85%"></i></div>
+            <small>85% complete · 4 members</small>
+          </article>
+
+          <article class="project reveal" data-cat="ai">
+            <div class="project-top"><span class="chip">AI &amp; ML</span><span class="status s-open">Open to join</span></div>
+            <h4>Crop Disease Detection from Leaf Photos</h4>
+            <p>Train a lightweight vision model that runs on a phone for farmers in low-connectivity areas.</p>
+            <div class="stack"><i>TensorFlow Lite</i><i>Computer Vision</i></div>
+            <div class="progress" aria-label="Progress 10%"><i style="--w:10%"></i></div>
+            <small>10% complete · 3 of 6 seats filled</small>
+          </article>
+
+          <article class="project reveal" data-cat="web">
+            <div class="project-top"><span class="chip">Web &amp; Apps</span><span class="status s-open">Open to join</span></div>
+            <h4>Accessible Campus Navigation PWA</h4>
+            <p>An offline-friendly map with voice guidance and step-free route options.</p>
+            <div class="stack"><i>JavaScript</i><i>PWA</i><i>OpenStreetMap</i></div>
+            <div class="progress" aria-label="Progress 20%"><i style="--w:20%"></i></div>
+            <small>20% complete · 2 of 5 seats filled</small>
+          </article>
+
+          <article class="project reveal" data-cat="security">
+            <div class="project-top"><span class="chip">Cybersecurity</span><span class="status s-open">Open to join</span></div>
+            <h4>Phishing Email Classifier</h4>
+            <p>Compare classical and neural approaches on a new dataset of campus-targeted phishing.</p>
+            <div class="stack"><i>scikit-learn</i><i>NLP</i></div>
+            <div class="progress" aria-label="Progress 15%"><i style="--w:15%"></i></div>
+            <small>15% complete · 1 of 4 seats filled</small>
+          </article>
+
+          <article class="project reveal" data-cat="data">
+            <div class="project-top"><span class="chip">Data Science</span><span class="status s-done">Completed</span></div>
+            <h4>Open Dataset of Campus Wi-Fi Usage</h4>
+            <p>Anonymised usage patterns released for planning and coursework.</p>
+            <div class="stack"><i>Pandas</i><i>SQL</i><i>Plotly</i></div>
+            <div class="progress" aria-label="Progress 100%"><i style="--w:100%"></i></div>
+            <small>Published · 5 contributors</small>
+          </article>
+
+          <article class="project reveal" data-cat="iot">
+            <div class="project-top"><span class="chip">IoT &amp; Embedded</span><span class="status s-done">Completed</span></div>
+            <h4>Low-cost Drone Obstacle Avoidance</h4>
+            <p>Ultrasonic and vision fusion for a hobby-grade quadcopter.</p>
+            <div class="stack"><i>Arduino</i><i>OpenCV</i></div>
+            <div class="progress" aria-label="Progress 100%"><i style="--w:100%"></i></div>
+            <small>Presented at a student symposium · 4 contributors</small>
+          </article>
+        </div>
+        <p class="empty" id="emptyMsg" hidden>No projects in this area yet — suggest one after you join!</p>
+      </div>
+    </section>
+
+    <!-- PUBLICATIONS -->
+    <section class="section alt" id="publications">
+      <div class="container narrow">
+        <div class="section-head reveal">
+          <p class="kicker">Output</p>
+          <h2>Papers, posters &amp; demos</h2>
+          <p>Sample entries — add your real publications here.</p>
+        </div>
+        <ul class="pubs">
+          <li class="pub reveal">
+            <span class="pub-year">2026</span>
+            <div>
+              <h4>Sensor Fusion for Low-cost Drone Obstacle Avoidance</h4>
+              <p>Student Tech Symposium · Poster &amp; live demo</p>
+            </div>
+            <span class="badge b-research">Poster</span>
+          </li>
+          <li class="pub reveal">
+            <span class="pub-year">2026</span>
+            <div>
+              <h4>A Campus Wi-Fi Usage Dataset for Educational Use</h4>
+              <p>Open data release · Public repository</p>
+            </div>
+            <span class="badge b-webinar">Dataset</span>
+          </li>
+          <li class="pub reveal">
+            <span class="pub-year">2025</span>
+            <div>
+              <h4>Detecting Common Misconfigurations in Student-built Web Apps</h4>
+              <p>Inter-college hackathon · Winning project</p>
+            </div>
+            <span class="badge b-discuss">Hackathon</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">How it works</p>
+          <h2>From idea to impact in four stages</h2>
+        </div>
+        <ol class="steps">
+          <li class="step reveal"><span>1</span><h4>Ideate</h4><p>Pitch a problem or pick an open one from the board.</p></li>
+          <li class="step reveal"><span>2</span><h4>Propose</h4><p>Draft a short plan with a mentor: goals, scope, timeline.</p></li>
+          <li class="step reveal"><span>3</span><h4>Build</h4><p>Prototype, test and iterate with weekly check-ins.</p></li>
+          <li class="step reveal"><span>4</span><h4>Share</h4><p>Write up, present and publish what you learned.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-band">
+      <div class="container cta-inner reveal">
+        <div>
+          <h2>Want a seat on a research team?</h2>
+          <p>Paid memberships unlock project teams, mentorship and co-authorship. Sign up first, then choose a plan from your dashboard.</p>
+        </div>
+        <a href="account.html#/register" class="btn">Create your account</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <a href="index.html" class="logo"><span class="logo-text">Nx<span>Tech Club</span></span></a>
+        <p class="muted">Discuss. Build. Research.</p>
+      </div>
+      <div class="foot-links">
+        <a href="index.html#perks">Perks</a>
+        <a href="index.html#webinars">Events</a>
+        <a href="research.html">Research</a>
+        <a href="account.html#/register">Join</a>
+      </div>
+      <p class="muted">© <span id="year"></span> NxTech Club. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <button class="to-top" id="toTop" aria-label="Back to top">↑</button>
+  <script src="script.js"></script>
+</body>
+</html>
