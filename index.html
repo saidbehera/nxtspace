@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NxtSpace — Launching soon</title>
+  <meta name="description" content="NxtSpace is launching soon: tech discussions, expert webinars and hands-on research for builders and curious minds. Join the waitlist for early access." />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#f5f7ff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0a1024" media="(prefers-color-scheme: dark)" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="NxtSpace" />
+  <meta property="og:title" content="NxtSpace — Launching soon" />
+  <meta property="og:description" content="Tech discussions, expert webinars and hands-on research. Join the waitlist for early access." />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://s.pageclip.co" crossorigin />
+  <link rel="preconnect" href="https://send.pageclip.co" crossorigin />
+  <script src="https://s.pageclip.co/v1/pageclip.js" charset="utf-8" defer></script>
+
+  <style>
+    :root {
+      --bg: #f5f7ff;
+      --surface: #ffffff;
+      --text: #121a33;
+      --muted: #566080;
+      --border: #dde3f4;
+      --primary: #3453ff;
+      --primary-2: #0b8f86;
+      --accent: #c2570f;
+      --danger: #c62828;
+      --ok: #0a7a6e;
+      --btn-from: #3453ff;
+      --btn-to: #0b7fb0;
+      --btn-text: #ffffff;
+      --shadow: 0 24px 60px rgba(30, 50, 120, 0.14);
+      --net-a: #3453ff;
+      --net-b: #00a99b;
+      color-scheme: light dark;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0a1024;
+        --surface: #141d3a;
+        --text: #eaf0ff;
+        --muted: #a6b1d6;
+        --border: #26325e;
+        --primary: #8aa0ff;
+        --primary-2: #2fe0cf;
+        --accent: #ffa05e;
+        --danger: #ff8a8f;
+        --ok: #4be3d2;
+        --btn-from: #8aa0ff;
+        --btn-to: #2fe0cf;
+        --btn-text: #08102a;
+        --shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+        --net-a: #8aa0ff;
+        --net-b: #2fe0cf;
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background:
+        radial-gradient(900px 520px at 88% 0%, color-mix(in srgb, var(--primary) 20%, transparent), transparent 62%),
+        radial-gradient(700px 520px at 0% 100%, color-mix(in srgb, var(--primary-2) 18%, transparent), transparent 62%),
+        var(--bg);
+      background-attachment: fixed;
+    }
+    h1, h2, h3 { line-height: 1.12; margin: 0; letter-spacing: -0.02em; }
+    p { margin: 0; }
+    a { color: inherit; }
+    :focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; border-radius: 6px; }
+
+    #bg { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    .skip {
+      position: absolute; left: 12px; top: -60px; z-index: 10;
+      background: var(--surface); color: var(--text); padding: 10px 14px; border-radius: 10px;
+      border: 1px solid var(--border); text-decoration: none; font-weight: 600;
+    }
+    .skip:focus { top: 12px; }
+
+    .wrap { position: relative; z-index: 1; width: min(1120px, 100% - 40px); margin-inline: auto; padding: 28px 0 40px; min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
+    .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.2rem; letter-spacing: -0.01em; text-decoration: none; }
+    .logo svg { width: 34px; height: 34px; flex: none; }
+    .logo span span { color: var(--muted); font-weight: 500; }
+
+    main { flex: 1; display: grid; align-items: center; gap: 44px; padding: 48px 0 32px; grid-template-columns: 1fr; }
+    @media (min-width: 940px) { main { grid-template-columns: 1.15fr 0.85fr; gap: 64px; } }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 6px 14px; border-radius: 999px; font-size: 0.86rem; font-weight: 600;
+      background: var(--surface); border: 1px solid var(--border); color: var(--muted);
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary-2); animation: pulse 2s infinite; }
+    h1 { font-size: clamp(2.5rem, 7vw, 4.6rem); margin: 22px 0 18px; }
+    .grad { background: linear-gradient(120deg, var(--primary), var(--primary-2) 62%, var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .lead { font-size: clamp(1.05rem, 2.2vw, 1.25rem); color: var(--muted); max-width: 34em; }
+
+    .perks { list-style: none; margin: 30px 0 0; padding: 0; display: grid; gap: 14px; max-width: 34em; }
+    .perks li { display: flex; gap: 14px; align-items: flex-start; }
+    .perk-ico { flex: none; width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: var(--surface); border: 1px solid var(--border); color: var(--primary); }
+    .perk-ico svg { width: 22px; height: 22px; }
+    .perks b { display: block; font-size: 1rem; }
+    .perks small { color: var(--muted); font-size: 0.93rem; }
+
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 34px 30px; box-shadow: var(--shadow); }
+    .card h2 { font-size: 1.6rem; }
+    .sub { color: var(--muted); margin: 8px 0 22px; }
+
+    form { display: grid; gap: 16px; }
+    .field { display: grid; gap: 6px; }
+    label { font-weight: 600; font-size: 0.92rem; }
+    .opt { color: var(--muted); font-weight: 400; }
+    input[type="text"], input[type="email"], select {
+      width: 100%; font: inherit; color: var(--text); background: var(--bg);
+      border: 1.5px solid var(--border); border-radius: 12px; padding: 12px 14px; min-height: 48px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    select {
+      appearance: none; -webkit-appearance: none; padding-right: 40px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9' fill='none' stroke='%23808aab' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 16px center;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 22%, transparent); }
+    .invalid input { border-color: var(--danger); }
+    .err { color: var(--danger); font-size: 0.86rem; min-height: 1.2em; }
+    .err:empty { min-height: 0; }
+    .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+
+    .btn {
+      position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; min-height: 52px; border: 0; border-radius: 999px; cursor: pointer;
+      font: 700 1.02rem/1 inherit; font-family: inherit; color: var(--btn-text);
+      background: linear-gradient(135deg, var(--btn-from), var(--btn-to));
+      box-shadow: 0 10px 26px color-mix(in srgb, var(--primary) 35%, transparent);
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+    }
+    .btn:hover:not(:disabled) { transform: translateY(-2px); }
+    .btn:disabled { opacity: 0.75; cursor: progress; }
+    .spin { display: none; width: 18px; height: 18px; border-radius: 50%; border: 2.5px solid currentColor; border-right-color: transparent; animation: spin 0.8s linear infinite; }
+    .btn.loading .spin { display: inline-block; }
+
+    .status { min-height: 1.3em; font-weight: 600; text-align: center; font-size: 0.94rem; }
+    .status.error { color: var(--danger); }
+    .fine { color: var(--muted); font-size: 0.82rem; text-align: center; }
+    .devnote { padding: 10px 12px; border-radius: 10px; font-size: 0.84rem; background: color-mix(in srgb, var(--accent) 16%, transparent); border: 1px dashed var(--accent); }
+
+    .done { display: grid; gap: 10px; justify-items: center; text-align: center; padding: 10px 0; }
+    .done:focus { outline: none; }
+    .tick { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; color: var(--btn-text); background: linear-gradient(135deg, var(--btn-from), var(--btn-to)); }
+    .tick svg { width: 30px; height: 30px; }
+    .done h3 { font-size: 1.5rem; }
+    .done p { color: var(--muted); }
+    .link { background: none; border: 0; padding: 6px; font: inherit; font-weight: 600; color: var(--primary); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+
+    footer { position: relative; z-index: 1; color: var(--muted); font-size: 0.88rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+
+    .rise { animation: rise 0.7s ease both; }
+    .rise:nth-child(2) { animation-delay: 0.08s; } .rise:nth-child(3) { animation-delay: 0.16s; } .rise:nth-child(4) { animation-delay: 0.24s; }
+    @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--primary-2) 60%, transparent); } 70% { box-shadow: 0 0 0 10px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+    @media (max-width: 480px) { .card { padding: 26px 20px; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#join">Skip to sign-up</a>
+  <canvas id="bg" aria-hidden="true"></canvas>
+
+  <div class="wrap">
+    <header class="top">
+      <a class="logo" href="./" aria-label="NxtSpace">
+        <img src="favicon.svg" alt="Company Logo" height="25">
+        <span>Nxt<span>Space</span></span>
+      </a>
+    </header>
+
+    <main>
+      <section aria-labelledby="headline">
+        <p class="badge rise"><span class="dot" aria-hidden="true"></span> Launching soon</p>
+        <h1 id="headline" class="rise">The next big thing<br /><span class="grad">starts with NxtSpace.</span></h1>
+        <p class="lead rise">A community of builders, thinkers and researchers who debate where technology is heading, learn from industry experts, and turn ideas into real tech research.</p>
+        <ul class="perks rise">
+          <li>
+            <span class="perk-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a3 3 0 0 1-3 3H8l-5 4V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3z"/></svg></span>
+            <span><b>Tech discussions</b><small>Weekly talks, debates and paper circles.</small></span>
+          </li>
+          <li>
+            <span class="perk-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="13" height="14" rx="3"/><path d="m16 10 5-3v10l-5-3"/></svg></span>
+            <span><b>Expert webinars</b><small>Live sessions with engineers, founders and researchers.</small></span>
+          </li>
+          <li>
+            <span class="perk-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6L4.5 19a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 9V3"/><path d="M7.5 15h9"/></svg></span>
+            <span><b>Hands-on research</b><small>Mentored projects from first idea to prototype.</small></span>
+          </li>
+        </ul>
+      </section>
+
+      <section id="join" class="card rise" aria-labelledby="joinTitle">
+        <div id="formWrap">
+          <h2 id="joinTitle">Get early access</h2>
+          <p class="sub">Join the waitlist and we'll email you once, when the doors open.</p>
+
+          <form id="waitlist" action="https://send.pageclip.co/5USw4FUdiFlrL7zjUREZGO8jHEV0Sqf6/nxtspace-waitlist" method="post" accept-charset="utf-8">
+            <div class="field">
+              <label for="email">Email address</label>
+              <input id="email" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" maxlength="254" required placeholder="you@example.com" aria-describedby="email-err" />
+              <p class="err" id="email-err" role="alert"></p>
+            </div>
+            <div class="field">
+              <label for="name">Name <span class="opt">(optional)</span></label>
+              <input id="name" name="name" type="text" autocomplete="name" maxlength="80" placeholder="Your name" />
+            </div>
+            <div class="field">
+              <label for="interest">What excites you most? <span class="opt">(optional)</span></label>
+              <select id="interest" name="interest">
+                <option value="">Choose one…</option>
+                <option>Tech discussions</option>
+                <option>Expert webinars</option>
+                <option>Hands-on research</option>
+                <option>All of it</option>
+              </select>
+            </div>
+            <input type="hidden" name="source" value="launching-soon" />
+            <!-- Spam trap: hidden from people, tempting to bots. Intentionally has no name so it is never sent. -->
+            <div class="hp" aria-hidden="true"><label>Leave this field empty <input id="hp" type="text" tabindex="-1" autocomplete="off" /></label></div>
+
+            <button class="btn" id="submitBtn" type="submit"><span class="spin" aria-hidden="true"></span><span id="btnLabel">Notify me</span></button>
+            <p class="status" id="formStatus" role="status" aria-live="polite"></p>
+            <p class="devnote" id="devNote" hidden>Developer note: add your Pageclip key to the form's action URL (see the comment above the form). This message only appears on localhost.</p>
+            <p class="fine">We'll only use your email to tell you when NxtSpace launches. No spam.</p>
+          </form>
+        </div>
+
+        <div class="done" id="done" role="status" tabindex="-1" hidden>
+          <div class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+          <h3>You're on the list!</h3>
+          <p id="doneText">We'll email you as soon as NxtSpace opens its doors.</p>
+          <button type="button" class="link" id="again">Sign up another email</button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>© <span id="year">2026</span> NxtSpace. All rights reserved.</span>
+      <span>Discuss. Build. Research.</span>
+    </footer>
+  </div>
+
+  <script>
+  (function () {
+    "use strict";
+    var $ = function (id) { return document.getElementById(id); };
+
+    /* ---------- footer year ---------- */
+    var yr = $("year"); if (yr) yr.textContent = new Date().getFullYear();
+
+    /* ---------- background network (decorative) ---------- */
+    (function () {
+      var canvas = $("bg"), ctx = canvas && canvas.getContext && canvas.getContext("2d");
+      if (!ctx) return;
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+      var W = 0, H = 0, nodes = [], raf = 0, running = false, timer = 0;
+      var cssVar = function (n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim() || "#3453ff"; };
+      var colA = cssVar("--net-a"), colB = cssVar("--net-b");
+
+      function build() {
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = window.innerWidth; H = window.innerHeight;
+        canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        var n = Math.max(18, Math.min(Math.floor((W * H) / 17000), 70));
+        nodes = [];
+        for (var i = 0; i < n; i++) nodes.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3, r: Math.random() * 1.8 + 0.9 });
+      }
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        var max = 130, i, j, a, b, d;
+        for (i = 0; i < nodes.length; i++) {
+          a = nodes[i];
+          for (j = i + 1; j < nodes.length; j++) {
+            b = nodes[j]; d = Math.hypot(a.x - b.x, a.y - b.y);
+            if (d < max) { ctx.globalAlpha = (1 - d / max) * 0.28; ctx.strokeStyle = colA; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+          }
+        }
+        ctx.globalAlpha = 0.7;
+        for (i = 0; i < nodes.length; i++) { ctx.fillStyle = i % 3 ? colA : colB; ctx.beginPath(); ctx.arc(nodes[i].x, nodes[i].y, nodes[i].r, 0, 6.2832); ctx.fill(); }
+        ctx.globalAlpha = 1;
+      }
+      function frame() {
+        for (var i = 0; i < nodes.length; i++) {
+          var n = nodes[i]; n.x += n.vx; n.y += n.vy;
+          if (n.x < 0 || n.x > W) n.vx *= -1;
+          if (n.y < 0 || n.y > H) n.vy *= -1;
+        }
+        draw();
+        raf = requestAnimationFrame(frame);
+      }
+      function start() { if (running || reduce.matches || document.hidden) return; running = true; raf = requestAnimationFrame(frame); }
+      function stop() { running = false; cancelAnimationFrame(raf); }
+
+      build(); draw(); start();
+      document.addEventListener("visibilitychange", function () { if (document.hidden) stop(); else start(); });
+      window.addEventListener("resize", function () { clearTimeout(timer); timer = setTimeout(function () { build(); draw(); }, 200); });
+      if (window.matchMedia) {
+        var dark = window.matchMedia("(prefers-color-scheme: dark)");
+        var onTheme = function () { colA = cssVar("--net-a"); colB = cssVar("--net-b"); draw(); };
+        if (dark.addEventListener) dark.addEventListener("change", onTheme);
+      }
+    })();
+
+    /* ---------- waitlist form ---------- */
+    document.addEventListener("DOMContentLoaded", function () {
+      var form = $("waitlist"), formWrap = $("formWrap"), done = $("done"), doneText = $("doneText");
+      var emailEl = $("email"), hp = $("hp"), btn = $("submitBtn"), btnLabel = $("btnLabel"), statusEl = $("formStatus");
+      var STORE = "nxtspace:waitlist-joined";
+      var ACTION_RE = /^https:\/\/send\.pageclip\.co\/[A-Za-z0-9_]{32}\/[^\/?#]+$/;
+      var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+      var configured = ACTION_RE.test(form.getAttribute("action") || "");
+      var sentEmail = "";
+
+      form.noValidate = true; // we show our own, accessible messages
+
+      var host = location.hostname;
+      var isLocal = location.protocol === "file:" || host === "localhost" || host === "127.0.0.1" || host === "[::1]";
+      if (!configured) {
+        console.error("[NxtSpace] The Pageclip key is not set. Edit the form's action URL in index.html (see the PAGECLIP SETUP comment). Sign-ups are disabled until then.");
+        if (isLocal) $("devNote").hidden = false;
+      }
+
+      function remember(flag) { try { if (flag) localStorage.setItem(STORE, "1"); else localStorage.removeItem(STORE); } catch (e) { /* storage unavailable */ } }
+      function remembered() { try { return localStorage.getItem(STORE) === "1"; } catch (e) { return false; } }
+
+      function setStatus(msg, kind) { statusEl.textContent = msg || ""; statusEl.className = "status" + (kind ? " " + kind : ""); }
+      function fieldError(input, msg) {
+        $(input.id + "-err").textContent = msg || "";
+        input.setAttribute("aria-invalid", msg ? "true" : "false");
+        input.closest(".field").classList.toggle("invalid", !!msg);
+      }
+      function setBusy(on) {
+        btn.disabled = on; btn.classList.toggle("loading", on);
+        btnLabel.textContent = on ? "Joining…" : "Notify me";
+        form.setAttribute("aria-busy", on ? "true" : "false");
+      }
+      function reenable() { for (var i = 0; i < form.elements.length; i++) form.elements[i].disabled = false; }
+
+      function showDone(email, silent, noFocus) {
+        formWrap.hidden = true;
+        doneText.textContent = email ? "We'll email " + email + " as soon as NxtSpace opens its doors." : "We'll email you as soon as NxtSpace opens its doors.";
+        done.hidden = false;
+        if (!noFocus) done.focus();
+        if (!silent) remember(true);
+      }
+      function showForm() {
+        remember(false);
+        done.hidden = true; formWrap.hidden = false;
+        form.reset(); setBusy(false); reenable(); setStatus(""); fieldError(emailEl);
+        emailEl.focus();
+      }
+      $("again").addEventListener("click", showForm);
+
+      function validate() {
+        var email = emailEl.value.trim(), msg = "";
+        if (!email) msg = "Please enter your email address.";
+        else if (!EMAIL_RE.test(email)) msg = "That email doesn't look right. Please check it.";
+        fieldError(emailEl, msg);
+        if (msg) emailEl.focus();
+        return !msg;
+      }
+
+      /* Runs before anything is sent. Return false to cancel. */
+      function preflight() {
+        setStatus("");
+        if (!validate()) return false;
+        if (hp.value) { showDone(emailEl.value.trim(), true); return false; } // bot: pretend it worked, send nothing
+        if (!configured) { setStatus("Sign-ups are temporarily unavailable. Please try again soon.", "error"); return false; }
+        sentEmail = emailEl.value.trim();
+        setBusy(true);
+        return true;
+      }
+
+      function onResponse(error) {
+        setBusy(false);
+        if (error) {
+          console.error("[NxtSpace] Pageclip could not save the sign-up:", error);
+          setStatus("Something went wrong and we couldn't save your sign-up. Please try again.", "error");
+          reenable(); setTimeout(reenable, 350); // Pageclip restores its own state shortly after a response
+          return false;
+        }
+        showDone(sentEmail);
+        return false; // we show our own confirmation
+      }
+
+      var bound = false;
+      if (configured && window.Pageclip && typeof window.Pageclip.form === "function") {
+        try {
+          window.Pageclip.form(form, { onSubmit: preflight, onResponse: onResponse });
+          bound = true;
+        } catch (e) { console.error("[NxtSpace] Pageclip could not attach to the form:", e); }
+      }
+      if (!bound) {
+        // Pageclip's script is unavailable (blocked or offline): validate, then let the browser post the form directly.
+        form.addEventListener("submit", function (e) { if (!preflight()) e.preventDefault(); });
+      }
+
+      emailEl.addEventListener("input", function () { if (emailEl.getAttribute("aria-invalid") === "true") validate(); });
+      if (remembered()) showDone("", true, true);
+    });
+  })();
+  </script>
+</body>
+</html>
