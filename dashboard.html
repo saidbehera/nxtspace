@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard — NxTech Club</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Dashboard-specific additions — style.css is untouched ── */
+
+    /* Constellation sits fixed behind everything */
+    #constellation {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Loading overlay */
+    #dbLoading {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: grid;
+      place-items: center;
+      background: var(--bg);
+      transition: opacity .3s;
+    }
+    #dbLoading.fade {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .db-spinner-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    /* Page shell */
+    .db-page {
+      position: relative;
+      z-index: 1;
+      min-height: 100svh;
+      padding: calc(var(--nav-h) + 44px) 0 72px;
+    }
+    .db-wrap {
+      width: min(1040px, 92%);
+      margin-inline: auto;
+    }
+
+    /* Welcome banner */
+    .db-welcome {
+      padding: 13px 18px;
+      border-radius: 14px;
+      background: color-mix(in srgb, var(--primary-2) 14%, transparent);
+      border: 1px solid color-mix(in srgb, var(--primary-2) 40%, var(--border));
+      font-size: .94rem;
+      margin-bottom: 22px;
+      animation: fadeUp .45s ease;
+    }
+
+    /* Dashboard header */
+    .db-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+    .db-identity {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .db-name-block h1 {
+      font-size: clamp(1.35rem, 3vw, 1.7rem);
+      margin: 0 0 2px;
+    }
+    .db-name-block p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .88rem;
+      word-break: break-all;
+    }
+    .db-actions-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Plan badge */
+    .plan-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: .78rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 999px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .pb-free    { background: color-mix(in srgb, var(--muted) 16%, transparent);     color: var(--muted); }
+    .pb-starter { background: color-mix(in srgb, var(--primary-2) 18%, transparent); color: var(--primary-2); }
+    .pb-pro     { background: color-mix(in srgb, var(--primary) 18%, transparent);   color: var(--primary); }
+    .pb-team    { background: color-mix(in srgb, var(--accent) 18%, transparent);    color: var(--accent); }
+
+    /* Glass card */
+    .glass {
+      background: color-mix(in srgb, var(--surface) 82%, transparent);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    /* Card grid */
+    .db-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    @media (max-width: 680px) {
+      .db-grid { grid-template-columns: 1fr; }
+    }
+    .db-card {
+      padding: 26px;
+    }
+    .db-card.span2 {
+      grid-column: 1 / -1;
+    }
+    .db-card-label {
+      font-size: .76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--muted);
+      margin: 0 0 16px;
+    }
+
+    /* Membership card */
+    .plan-display {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .plan-name-big {
+      font: 700 2rem "Space Grotesk", sans-serif;
+      color: var(--primary);
+      line-height: 1;
+    }
+    .plan-desc {
+      margin: 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    /* Quick links */
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .action-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 18px 10px;
+      border-radius: 14px;
+      border: 1.5px solid var(--border);
+      background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
+      cursor: pointer;
+      color: var(--text);
+      font: 600 .85rem "Inter", sans-serif;
+      text-align: center;
+      text-decoration: none;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .action-btn:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(59,91,255,.15);
+    }
+    .action-ico { font-size: 1.4rem; }
+
+    /* Getting started steps */
+    .step-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 14px;
+    }
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .step-num {
+      flex: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font: 700 .82rem "Space Grotesk", sans-serif;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      background: color-mix(in srgb, var(--bg-alt) 80%, transparent);
+    }
+    .step-item.done .step-num {
+      background: var(--primary-2);
+      border-color: var(--primary-2);
+      color: #06201d;
+    }
+    .step-body b { display: block; font-size: .95rem; margin-bottom: 2px; }
+    .step-body small { color: var(--muted); font-size: .85rem; }
+  </style>
+</head>
+<body data-page="dashboard">
+
+  <!-- Full-page constellation background -->
+  <canvas id="constellation" aria-hidden="true"></canvas>
+
+  <!-- Auth-check loading overlay -->
+  <div id="dbLoading">
+    <div class="db-spinner-wrap">
+      <div class="spinner" role="status" aria-label="Loading"></div>
+      <span>Checking your session…</span>
+    </div>
+  </div>
+
+  <header class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo" aria-label="NxTech Club home">
+        <span class="logo-mark">
+          <svg viewBox="0 0 32 32" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M11 9l-7 7 7 7"/><path d="M21 9l7 7-7 7"/><path d="M18 7l-4 18"/>
+          </svg>
+        </span>
+        <span class="logo-text">Nx<span>Tech Club</span></span>
+      </a>
+      <nav class="nav-links" id="navLinks" aria-label="Main">
+        <a href="index.html#perks">Perks</a>
+        <a href="index.html#webinars">Events</a>
+        <a href="research.html">Research</a>
+        <a href="index.html#join">Membership</a>
+        <button type="button" class="btn btn-small btn-ghost" id="logoutBtnNav">Log out</button>
+      </nav>
+      <div class="nav-actions">
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle light/dark theme">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </button>
+        <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="db-page" id="dbMain" hidden>
+    <div class="db-wrap">
+
+      <!-- Welcome notice (shown once after sign-in/register) -->
+      <div class="db-welcome" id="dbWelcome" hidden></div>
+
+      <!-- User header -->
+      <div class="db-header">
+        <div class="db-identity">
+          <span class="avatar" id="avatar" aria-hidden="true"></span>
+          <div class="db-name-block">
+            <h1 tabindex="-1">Hey, <span id="dashName"></span> 👋</h1>
+            <p id="dashEmail"></p>
+          </div>
+        </div>
+        <div class="db-actions-row">
+          <span class="plan-badge pb-free" id="planBadge">Free</span>
+          <button type="button" class="btn btn-small btn-ghost" id="logoutBtn">Log out</button>
+        </div>
+      </div>
+
+      <!-- Card grid -->
+      <div class="db-grid">
+
+        <!-- Membership -->
+        <div class="glass db-card">
+          <p class="db-card-label">Membership</p>
+          <div class="plan-display">
+            <span class="plan-name-big" id="planName">Free</span>
+            <a href="index.html#join" class="btn btn-small">Upgrade</a>
+          </div>
+          <p class="plan-desc">
+            Free is read-only. Paid plans unlock discussions, webinars and research teams.
+            <a class="text-link" href="index.html#join">See plans →</a>
+          </p>
+        </div>
+
+        <!-- Quick links -->
+        <div class="glass db-card">
+          <p class="db-card-label">Quick links</p>
+          <div class="action-grid">
+            <a class="action-btn" href="index.html#perks">
+              <span class="action-ico">🎁</span>Perks
+            </a>
+            <a class="action-btn" href="index.html#webinars">
+              <span class="action-ico">📅</span>Events
+            </a>
+            <a class="action-btn" href="research.html">
+              <span class="action-ico">🔬</span>Research
+            </a>
+            <a class="action-btn" href="index.html#join">
+              <span class="action-ico">⭐</span>Plans
+            </a>
+          </div>
+        </div>
+
+        <!-- Getting started -->
+        <div class="glass db-card span2">
+          <p class="db-card-label">Getting started</p>
+          <ol class="step-list">
+            <li class="step-item done">
+              <span class="step-num">✓</span>
+              <div class="step-body">
+                <b>Account created</b>
+                <small>You're signed in.</small>
+              </div>
+            </li>
+            <li class="step-item" id="stepPlan">
+              <span class="step-num">2</span>
+              <div class="step-body">
+                <b>Choose a plan</b>
+                <small>Optional. Free is read-only; paid plans unlock the full club.</small>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">3</span>
+              <div class="step-body">
+                <b>Complete payment</b>
+                <small>Paid plans activate after payment — no manual review needed.</small>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">4</span>
+              <div class="step-body">
+                <b>Unlock perks &amp; the member portal</b>
+                <small>Discussions, webinars and research teams open up.</small>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+      </div><!-- /db-grid -->
+    </div><!-- /db-wrap -->
+  </main>
+
+  <footer class="footer" id="dbFooter" hidden>
+    <div class="container footer-inner">
+      <div>
+        <a href="index.html" class="logo"><span class="logo-text">Nx<span>Tech Club</span></span></a>
+        <p class="muted">Discuss. Build. Research.</p>
+      </div>
+      <div class="foot-links">
+        <a href="index.html#perks">Perks</a>
+        <a href="research.html">Research</a>
+        <a href="account.html#/register">Join</a>
+      </div>
+      <p class="muted">© <span id="year"></span> NxTech Club. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="kinde-config.js"></script>
+  <script src="kinde-auth-pkce-js.umd.min.js"></script>
+  <script src="script.js"></script>
+  <script>
+    (() => {
+      "use strict";
+      const $ = s => document.querySelector(s);
+      const root = document.documentElement;
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      /* ── Constellation canvas ───────────────────────────── */
+      const canvas = $("#constellation");
+      if (canvas && !reduceMotion) {
+        const ctx = canvas.getContext("2d");
+        let W, H, nodes = [], raf;
+        const mouse = { x: null, y: null };
+
+        const colors = () => {
+          const s = getComputedStyle(root);
+          return {
+            a: s.getPropertyValue("--primary").trim(),
+            b: s.getPropertyValue("--primary-2").trim()
+          };
+        };
+
+        const resize = () => {
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          W = window.innerWidth; H = window.innerHeight;
+          canvas.width = W * dpr; canvas.height = H * dpr;
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          const count = Math.min(Math.floor((W * H) / 12000), 110);
+          nodes = Array.from({ length: count }, () => ({
+            x: Math.random() * W, y: Math.random() * H,
+            vx: (Math.random() - .5) * .32, vy: (Math.random() - .5) * .32,
+            r: Math.random() * 1.8 + 0.9
+          }));
+        };
+
+        const draw = () => {
+          const c = colors(), maxD = 140;
+          ctx.clearRect(0, 0, W, H);
+          for (const n of nodes) {
+            n.x += n.vx; n.y += n.vy;
+            if (n.x < 0 || n.x > W) n.vx *= -1;
+            if (n.y < 0 || n.y > H) n.vy *= -1;
+            if (mouse.x !== null) {
+              const dx = n.x - mouse.x, dy = n.y - mouse.y, d = Math.hypot(dx, dy);
+              if (d > 0 && d < 120) { n.x += dx / d * 0.75; n.y += dy / d * 0.75; }
+            }
+          }
+          for (let i = 0; i < nodes.length; i++) {
+            for (let j = i + 1; j < nodes.length; j++) {
+              const a = nodes[i], b = nodes[j], d = Math.hypot(a.x - b.x, a.y - b.y);
+              if (d < maxD) {
+                ctx.globalAlpha = (1 - d / maxD) * 0.28;
+                ctx.strokeStyle = c.a;
+                ctx.lineWidth = 0.9;
+                ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+              }
+            }
+          }
+          ctx.globalAlpha = 0.75;
+          nodes.forEach((n, i) => {
+            ctx.fillStyle = i % 3 ? c.a : c.b;
+            ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
+          });
+          ctx.globalAlpha = 1;
+          raf = requestAnimationFrame(draw);
+        };
+
+        resize();
+        window.addEventListener("resize", resize);
+        document.addEventListener("pointermove", e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+        document.addEventListener("pointerleave", () => { mouse.x = mouse.y = null; });
+        draw();
+      }
+
+      /* ── Auth + dashboard fill ──────────────────────────── */
+      const cfg = (window.NXTECH && window.NXTECH.kinde) || {};
+
+      const normaliseDomain = d => {
+        d = String(d || "").trim().replace(/\/+$/, "");
+        return /^https?:\/\//i.test(d) ? d : d ? "https://" + d : "";
+      };
+
+      const clientId   = String(cfg.clientId || "").trim();
+      const domain     = normaliseDomain(cfg.domain);
+      // Redirect URI must point to account.html (where Kinde sends users after auth)
+      const acctUrl    = location.href.replace(/\/dashboard\.html.*$/, "/account.html");
+      const redirectUri = String(cfg.redirectUri || "").trim() || acctUrl;
+
+      const showDash = () => {
+        const overlay = $("#dbLoading");
+        overlay.classList.add("fade");
+        setTimeout(() => { overlay.style.display = "none"; }, 320);
+        $("#dbMain").hidden   = false;
+        $("#dbFooter").hidden = false;
+      };
+
+      const planMeta = {
+        free:    { label: "Free",    cls: "pb-free" },
+        starter: { label: "Starter", cls: "pb-starter" },
+        pro:     { label: "Pro",     cls: "pb-pro" },
+        team:    { label: "Team",    cls: "pb-team" }
+      };
+
+      const init = async () => {
+        // If Kinde isn't configured, bounce to account setup
+        if (!clientId || !domain) { location.href = "account.html"; return; }
+
+        const factory = window.createKindeClient &&
+          (window.createKindeClient.default || window.createKindeClient);
+        if (typeof factory !== "function") { location.href = "account.html"; return; }
+
+        let kinde;
+        try {
+          kinde = await factory({
+            client_id: clientId,
+            domain,
+            redirect_uri: redirectUri,
+            logout_uri:   redirectUri,
+            is_dangerously_use_local_storage: cfg.useLocalStorage === true
+          });
+        } catch { location.href = "account.html"; return; }
+
+        const authed = await kinde.isAuthenticated().catch(() => false);
+        if (!authed) { location.href = "account.html#/login"; return; }
+
+        /* Get user */
+        let user = null;
+        try { user = (await kinde.getUserProfile()) || kinde.getUser(); }
+        catch { try { user = kinde.getUser(); } catch {} }
+
+        const email   = (user && user.email)      || "";
+        const name    = (user && user.given_name)  || email.split("@")[0] || "member";
+        const initial = (name.trim()[0] || "?").toUpperCase();
+
+        $("#avatar").textContent    = initial;
+        $("#dashName").textContent  = name;
+        $("#dashEmail").textContent = email;
+
+        /* Detect role from Kinde claims */
+        let role = "free";
+        try {
+          const claims = kinde.getClaims ? kinde.getClaims() : {};
+          const roles  = claims.roles ||
+            (claims.payload && claims.payload.roles) || [];
+          const keys   = roles.map(r => (typeof r === "string" ? r : r.key) || "");
+          if      (keys.includes("team"))    role = "team";
+          else if (keys.includes("pro"))     role = "pro";
+          else if (keys.includes("starter")) role = "starter";
+        } catch {}
+
+        const meta = planMeta[role] || planMeta.free;
+        $("#planName").textContent  = meta.label;
+        const badge = $("#planBadge");
+        badge.textContent           = meta.label;
+        badge.className             = "plan-badge " + meta.cls;
+
+        if (role !== "free") {
+          const stepEl = $("#stepPlan");
+          if (stepEl) {
+            stepEl.classList.add("done");
+            const numEl = stepEl.querySelector(".step-num");
+            if (numEl) numEl.textContent = "✓";
+          }
+        }
+
+        /* Welcome notice (set by account.js on redirect) */
+        const welcome = (() => {
+          try { return sessionStorage.getItem("nxtech_welcome"); } catch { return null; }
+        })();
+        if (welcome) {
+          const wEl = $("#dbWelcome");
+          wEl.textContent = welcome === "register"
+            ? "🎉 Account created — welcome to NxTech Club!"
+            : "👋 Welcome back. You're signed in.";
+          wEl.hidden = false;
+          try { sessionStorage.removeItem("nxtech_welcome"); } catch {}
+        }
+
+        /* Logout */
+        const logout = async () => {
+          try { await kinde.logout(); }
+          catch { location.href = "account.html#/login"; }
+        };
+        $("#logoutBtn").addEventListener("click", logout);
+        $("#logoutBtnNav").addEventListener("click", logout);
+
+        /* Footer year */
+        const yr = $("#year");
+        if (yr) yr.textContent = new Date().getFullYear();
+
+        showDash();
+      };
+
+      init();
+    })();
+  </script>
+</body>
+</html>

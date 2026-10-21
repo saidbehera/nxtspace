@@ -3,26 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Log in or create an account — NxtSpace</title>
-  <meta name="description" content="Log in to or create your NxtSpace account." />
+  <title>Log in or create an account — NxTech Club</title>
+  <meta name="description" content="Log in to or create your NxTech Club account." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
-  <!-- Dashboard and constellation layer overrides; keep these after your existing site stylesheet. -->
-  <link rel="stylesheet" href="dashboard.css" />
 </head>
 <body data-page="account">
 
   <header class="nav" id="nav">
     <div class="container nav-inner">
-      <a href="index.html" class="logo" aria-label="NxtSpace home">
+      <a href="index.html" class="logo" aria-label="NxTech Club home">
         <span class="logo-mark">
           <svg viewBox="0 0 32 32" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M11 9l-7 7 7 7"/><path d="M21 9l7 7-7 7"/><path d="M18 7l-4 18"/>
           </svg>
         </span>
-        <span class="logo-text">Nxt<span>Space</span></span>
+        <span class="logo-text">Nx<span>Tech Club</span></span>
       </a>
       <nav class="nav-links" id="navLinks" aria-label="Main">
         <a href="index.html#perks">Perks</a>
@@ -60,17 +58,17 @@
         <a href="#/register" data-seg="register">Create account</a>
       </nav>
       <h1 tabindex="-1">Welcome back</h1>
-      <p class="muted">Log in to your NxtSpace account.</p>
+      <p class="muted">Log in to your NxTech Club account.</p>
       <form class="auth-form" data-form="login" novalidate>
         <div class="field">
           <label for="loginEmail">Email address</label>
           <input type="email" id="loginEmail" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required />
-          <small class="hint">We’ll use this to continue to secure email verification.</small>
+          <small class="hint">We'll use this to continue to secure email verification.</small>
           <small class="err" role="alert"></small>
         </div>
         <button type="submit" class="btn btn-block">Log in</button>
       </form>
-      <p class="switch">New to NxtSpace? <a class="text-link" href="#/register">Create an account</a></p>
+      <p class="switch">New to NxTech? <a class="text-link" href="#/register">Create an account</a></p>
       <p class="secure">🔒 Secure sign-in is handled by Kinde. We never see your password.</p>
     </section>
 
@@ -86,7 +84,7 @@
         <div class="field">
           <label for="registerEmail">Email address</label>
           <input type="email" id="registerEmail" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required />
-          <small class="hint">We’ll use this to continue to secure email verification.</small>
+          <small class="hint">We'll use this to continue to secure email verification.</small>
           <small class="err" role="alert"></small>
         </div>
         <button type="submit" class="btn btn-block">Create account</button>
@@ -98,149 +96,6 @@
       </ol>
       <p class="switch">Already a member? <a class="text-link" href="#/login">Log in</a></p>
       <p class="secure">🔒 Secure sign-up is handled by Kinde.</p>
-    </section>
-
-    <!-- TEMPORARY NXTSPACE DASHBOARD -->
-    <section class="auth-card dash nxt-dashboard" data-view="dashboard" hidden>
-      <div class="nxt-dashboard-head">
-        <div class="dash-head">
-          <span class="avatar" id="avatar" aria-hidden="true"></span>
-          <div>
-            <p class="nxt-eyebrow">NXTSPACE MEMBER AREA</p>
-            <h1 tabindex="-1">Welcome, <span id="dashName"></span></h1>
-            <p class="muted" id="dashEmail"></p>
-          </div>
-        </div>
-        <div class="nxt-dashboard-actions">
-          <span class="nxt-status-pill" id="dashVerificationPill">Checking account…</span>
-          <button type="button" class="btn btn-ghost btn-small" id="logoutBtn">Log out</button>
-        </div>
-      </div>
-
-      <p class="notice ok" id="dashNote" role="status" hidden></p>
-
-      <section class="nxt-dashboard-hero" aria-labelledby="dashHeroTitle">
-        <div class="nxt-dashboard-hero-copy">
-          <p class="nxt-eyebrow">YOUR SPACE. YOUR NEXT IDEA.</p>
-          <h2 id="dashHeroTitle">Make room for what’s next.</h2>
-          <p>Your NxtSpace dashboard is active. This is a temporary workspace while membership plans, events, research tools, and community features are being connected.</p>
-          <div class="nxt-hero-tags">
-            <span>Account connected</span>
-            <span id="dashPlanHero">Plan setup pending</span>
-          </div>
-        </div>
-        <div class="nxt-orbit-art" aria-hidden="true">
-          <svg viewBox="0 0 220 180" fill="none" role="presentation">
-            <ellipse cx="110" cy="90" rx="87" ry="34" transform="rotate(-28 110 90)" />
-            <ellipse cx="110" cy="90" rx="87" ry="34" transform="rotate(42 110 90)" />
-            <ellipse cx="110" cy="90" rx="60" ry="70" />
-            <path d="M28 45 76 74 124 38 186 81 142 135 78 124 28 45Z" />
-            <circle cx="28" cy="45" r="4"/><circle cx="76" cy="74" r="4"/><circle cx="124" cy="38" r="4"/>
-            <circle cx="186" cy="81" r="4"/><circle cx="142" cy="135" r="4"/><circle cx="78" cy="124" r="4"/>
-            <circle class="nxt-orbit-center" cx="110" cy="90" r="8"/>
-          </svg>
-        </div>
-      </section>
-
-      <div class="nxt-section-title">
-        <div>
-          <p class="nxt-eyebrow">OVERVIEW</p>
-          <h2>Account snapshot</h2>
-        </div>
-        <span class="nxt-live-label"><span aria-hidden="true"></span> Connected to Kinde</span>
-      </div>
-
-      <div class="nxt-metric-grid">
-        <article class="nxt-metric-card">
-          <span class="nxt-metric-label">ACCOUNT STATUS</span>
-          <h3 id="dashAccountStatus">Authenticated</h3>
-          <p id="dashVerificationDetail">Your account session is active.</p>
-        </article>
-        <article class="nxt-metric-card">
-          <span class="nxt-metric-label">MEMBERSHIP PLAN</span>
-          <h3 id="dashPlan">Not assigned</h3>
-          <p id="dashPlanDetail">Your Kinde plan role will appear here once it is assigned.</p>
-        </article>
-        <article class="nxt-metric-card">
-          <span class="nxt-metric-label">WORKSPACE</span>
-          <h3 id="dashOrganization">Personal workspace</h3>
-          <p id="dashOrgDetail">Checking organization membership…</p>
-        </article>
-      </div>
-
-      <div class="nxt-dashboard-columns">
-        <section class="nxt-dashboard-panel" aria-labelledby="dashAccessTitle">
-          <div class="nxt-panel-heading">
-            <div>
-              <p class="nxt-eyebrow">IDENTITY & ACCESS</p>
-              <h2 id="dashAccessTitle">Your access</h2>
-            </div>
-            <span class="nxt-panel-icon" aria-hidden="true">⌘</span>
-          </div>
-          <div class="nxt-detail-row">
-            <span>Roles</span>
-            <div class="nxt-chip-list" id="dashRoles"><span class="nxt-muted-chip">Loading roles…</span></div>
-          </div>
-          <div class="nxt-detail-row">
-            <span>Permissions</span>
-            <div class="nxt-chip-list" id="dashPermissions"><span class="nxt-muted-chip">Loading permissions…</span></div>
-          </div>
-          <div class="nxt-detail-row">
-            <span>Groups</span>
-            <div class="nxt-chip-list" id="dashGroups"><span class="nxt-muted-chip">No groups claim detected</span></div>
-          </div>
-          <p class="nxt-panel-footnote">Plan labels are read from the role names configured in <code>kinde-config.js</code>. Feature access must also be enforced by a trusted backend.</p>
-        </section>
-
-        <section class="nxt-dashboard-panel" aria-labelledby="dashRoadmapTitle">
-          <div class="nxt-panel-heading">
-            <div>
-              <p class="nxt-eyebrow">WHAT’S NEXT</p>
-              <h2 id="dashRoadmapTitle">Membership roadmap</h2>
-            </div>
-            <span class="nxt-panel-icon" aria-hidden="true">↗</span>
-          </div>
-          <div class="nxt-roadmap-item is-ready">
-            <span class="nxt-roadmap-marker" aria-hidden="true">✓</span>
-            <div><b>Account authentication</b><small>Your NxtSpace session is connected.</small></div>
-            <span class="nxt-roadmap-state">Ready</span>
-          </div>
-          <div class="nxt-roadmap-item">
-            <span class="nxt-roadmap-marker" aria-hidden="true">2</span>
-            <div><b>Membership & billing</b><small>Plan assignment and payments will be linked next.</small></div>
-            <span class="nxt-roadmap-state">Planned</span>
-          </div>
-          <div class="nxt-roadmap-item">
-            <span class="nxt-roadmap-marker" aria-hidden="true">3</span>
-            <div><b>Research & events</b><small>Member resources and event registrations.</small></div>
-            <span class="nxt-roadmap-state">Planned</span>
-          </div>
-        </section>
-      </div>
-
-      <div class="nxt-section-title nxt-features-title">
-        <div>
-          <p class="nxt-eyebrow">EXPLORE NXTSPACE</p>
-          <h2>Member tools</h2>
-        </div>
-        <span class="nxt-coming-soon">Temporary preview</span>
-      </div>
-      <div class="nxt-feature-grid">
-        <article class="nxt-feature-card"><span aria-hidden="true">⌕</span><h3>Research library</h3><p>Discover projects, papers, and shared resources.</p><span class="nxt-feature-state">Coming soon</span></article>
-        <article class="nxt-feature-card"><span aria-hidden="true">◎</span><h3>Events & webinars</h3><p>Keep track of sessions, workshops, and meetups.</p><span class="nxt-feature-state">Coming soon</span></article>
-        <article class="nxt-feature-card"><span aria-hidden="true">◇</span><h3>Community</h3><p>Connect with members and working groups.</p><span class="nxt-feature-state">Coming soon</span></article>
-      </div>
-      <p class="nxt-dashboard-disclaimer">This is a temporary dashboard preview. Plan assignment and payment status are not yet connected to a billing provider.</p>
-    </section>
-
-    <!-- Verified email is required when Kinde explicitly reports email_verified=false. -->
-    <section class="auth-card center nxt-verify-card" data-view="verify" hidden>
-      <div class="state-ico" aria-hidden="true">✉</div>
-      <p class="nxt-eyebrow">ONE MORE STEP</p>
-      <h1 tabindex="-1">Verify your email</h1>
-      <p class="muted">Kinde reports that this email address has not been verified yet. Open the verification message from NxtSpace/Kinde, complete verification, then sign in again to open your dashboard.</p>
-      <p class="nxt-verify-email" id="verifyEmailAddress"></p>
-      <button type="button" class="btn" id="verifyLogoutBtn">Log out and sign in again</button>
     </section>
 
     <!-- SOMETHING WENT WRONG -->
@@ -258,11 +113,13 @@
       <h1 tabindex="-1">Finish connecting Kinde</h1>
       <p id="setupMsg" class="muted"></p>
       <ol class="setup-steps" id="setupSteps">
-        <li>In your Kinde application settings, enable <b>Use your own sign-up and sign-in screens</b>, then save.</li>
-        <li>In <b>Settings → Environment → Authentication</b>, open your email authentication method and copy its <b>Connection ID</b>.</li>
-        <li>Add that value as <code>emailConnectionId</code> in <code>kinde-config.js</code>, alongside your existing Client ID and domain.</li>
-        <li>Add this address to both <b>Allowed callback URLs</b> and <b>Allowed logout redirect URLs</b>:
-          <code class="copy-line" id="setupUrl"></code></li>
+        <li>Add your <b>Client ID</b> and <b>Domain</b> to <code>kinde-config.js</code>.<br>
+            Find them in the Kinde dashboard under <b>Applications → your app → Details</b>.</li>
+        <li>In your Kinde app settings, add this address to both
+            <b>Allowed callback URLs</b> and <b>Allowed logout redirect URLs</b>:
+          <code class="copy-line" id="setupUrl"></code>
+        </li>
+        <li>Save, then reload this page.</li>
       </ol>
     </section>
 
@@ -271,7 +128,7 @@
   <footer class="footer">
     <div class="container footer-inner">
       <div>
-        <a href="index.html" class="logo"><span class="logo-text">Nxt<span>Space</span></span></a>
+        <a href="index.html" class="logo"><span class="logo-text">Nx<span>Tech Club</span></span></a>
         <p class="muted">Discuss. Build. Research.</p>
       </div>
       <div class="foot-links">
@@ -280,14 +137,13 @@
         <a href="research.html">Research</a>
         <a href="account.html#/register">Join</a>
       </div>
-      <p class="muted">© <span id="year"></span> NxtSpace. All rights reserved.</p>
+      <p class="muted">© <span id="year"></span> NxTech Club. All rights reserved.</p>
     </div>
   </footer>
 
   <script src="kinde-config.js"></script>
   <script src="kinde-auth-pkce-js.umd.min.js"></script>
   <script src="script.js"></script>
-  <script src="constellation-bg.js"></script>
   <script src="account.js"></script>
 </body>
 </html>
