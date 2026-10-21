@@ -1,23 +1,28 @@
-/* NxTech account SPA: log in, create account, dashboard.
-   Sign-in itself happens on Kinde's hosted pages (Authorization Code + PKCE, no secrets in the browser).
-   Routes (hash based): #/login  #/register  #/dashboard */
+/* NxtSpace account SPA: authentication, temporary member dashboard, and Kinde access metadata.
+   The browser only displays access metadata. Protected data/actions must be verified on a trusted backend. */
 (() => {
   "use strict";
 
   const $ = (s, c = document) => c.querySelector(s);
   const $$ = (s, c = document) => [...c.querySelectorAll(s)];
-  const cfg = (window.NXTECH && window.NXTECH.kinde) || {};
+  const cfg = (window.NXTSPACE && window.NXTSPACE.kinde) || (window.NXTECH && window.NXTECH.kinde) || {}; // NXTECH is retained for legacy config compatibility.
 
-  const SITE = "NxTech Club";
+  const SITE = "NxtSpace";
   const TITLES = {
     loading: "One moment…",
     login: "Log in",
     register: "Create your account",
-    dashboard: "Your dashboard",
+    dashboard: "Member dashboard",
+    verify: "Verify your email",
     error: "Sign-in problem",
     setup: "Set up sign-in"
   };
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const DEFAULT_PLAN_ROLE_MAP = {
+    nxtspace_free: "Free",
+    nxtspace_standard: "Standard",
+    nxtspace_pro: "Pro"
+  };
 
   /* ---------- configuration ---------- */
   const normaliseDomain = d => {
@@ -27,26 +32,152 @@
   };
   const clientId = String(cfg.clientId || "").trim();
   const domain = normaliseDomain(cfg.domain);
-  // Connection ID lets Kinde skip its initial sign-in/sign-up chooser screens.
-  // It is copied from Settings > Environment > Authentication in the Kinde dashboard.
   const emailConnectionId = String(cfg.emailConnectionId || "").trim();
   const onFile = location.protocol === "file:";
   const redirectUri = String(cfg.redirectUri || "").trim() || (onFile ? "" : location.origin + location.pathname);
   const configured = !!(clientId && domain && redirectUri && emailConnectionId) && !onFile;
+  const planRoleMap = cfg.planRoleMap && typeof cfg.planRoleMap === "object" ? cfg.planRoleMap : DEFAULT_PLAN_ROLE_MAP;
+  const groupClaimName = String(cfg.groupClaimName || "groups").trim() || "groups";
 
   /* ---------- state ---------- */
-  const views = $$("[data-view]");
+  const views = $$('[data-view]');
   let kinde = null;
   let user = null;
   let authed = false;
-  let failure = null;      // { message, detail }
-  let welcome = null;      // "register" | "login" after coming back from Kinde
+  let failure = null;
+  let welcome = null;
+  let emailVerified = null; // true/false when Kinde returns the claim; null when unavailable
+  let accessMeta = { roles: [], permissions: [], orgCodes: [], orgCode: "", groups: [] };
 
-  /* ---------- helpers ---------- */
+  /* ---------- utility helpers ---------- */
+  const safeText = (selector, value, root = document) => {
+    const el = $(selector, root);
+    if (el) el.textContent = value == null ? "" : String(value);
+    return el;
+  };
+
+  const getClaimValue = (claimName, tokenKey = "id_token") => {
+    try {
+      const result = kinde && typeof kinde.getClaim === "function" ? kinde.getClaim(claimName, tokenKey) : null;
+      if (result && typeof result === "object" && Object.prototype.hasOwnProperty.call(result, "value")) return result.value;
+      return result == null ? undefined : result;
+    } catch {
+      return undefined;
+    }
+  };
+
+  const toBooleanOrNull = value => {
+    if (value === true || value === 1 || String(value).toLowerCase() === "true") return true;
+    if (value === false || value === 0 || String(value).toLowerCase() === "false") return false;
+    return null;
+  };
+
+  const asList = value => {
+    if (Array.isArray(value)) return value;
+    if (value == null || value === "") return [];
+    if (typeof value === "string") return value.split(/[;,]/).map(v => v.trim()).filter(Boolean);
+    return [value];
+  };
+
+  const keyForRole = role => {
+    if (typeof role === "string") return role.trim();
+    if (!role || typeof role !== "object") return "";
+    return String(role.key || role.name || role.id || "").trim();
+  };
+
+  const displayRole = role => {
+    if (role && typeof role === "object") return String(role.name || role.key || role.id || "").trim();
+    return String(role || "").trim();
+  };
+
+  const normaliseOrgCodes = raw => {
+    if (Array.isArray(raw)) return raw.map(x => typeof x === "string" ? x : String(x && (x.orgCode || x.code) || "")).filter(Boolean);
+    if (raw && Array.isArray(raw.orgCodes)) return raw.orgCodes.map(String).filter(Boolean);
+    return [];
+  };
+
+  const readRolesFromAccountApi = async () => {
+    if (!kinde || typeof kinde.getAccessToken !== "function") return [];
+    const token = await kinde.getAccessToken();
+    if (!token) return [];
+    const issuer = getClaimValue("iss", "access_token");
+    const base = normaliseDomain(issuer || domain);
+    if (!base) return [];
+    const response = await fetch(`${base}/account_api/v1/roles`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }
+    });
+    if (!response.ok) throw new Error(`Kinde roles endpoint returned ${response.status}`);
+    const data = await response.json();
+    return Array.isArray(data.roles) ? data.roles : [];
+  };
+
+  const loadAccessMeta = async () => {
+    accessMeta = { roles: [], permissions: [], orgCodes: [], orgCode: "", groups: [] };
+    if (!kinde || !authed) return;
+
+    // Roles may be surfaced as token claims or through Kinde's user-scoped Account API.
+    let rawRoles = getClaimValue("roles", "id_token") ?? getClaimValue("roles", "access_token");
+    let roles = asList(rawRoles);
+    if (!roles.length) {
+      try {
+        // Accommodate SDK versions that expose getRoles directly, without requiring it.
+        if (typeof kinde.getRoles === "function") {
+          const result = await kinde.getRoles();
+          roles = asList(result && result.roles ? result.roles : result);
+        } else {
+          roles = await readRolesFromAccountApi();
+        }
+      } catch (err) {
+        console.info("[account] Kinde role metadata isn't available yet:", err && err.message || err);
+      }
+    }
+
+    let permissions = [];
+    try {
+      if (typeof kinde.getPermissions === "function") {
+        const result = kinde.getPermissions();
+        permissions = asList(result && result.permissions ? result.permissions : result);
+      } else {
+        permissions = asList(getClaimValue("permissions", "access_token"));
+      }
+    } catch {
+      permissions = asList(getClaimValue("permissions", "access_token"));
+    }
+
+    let organizations = [];
+    try {
+      organizations = normaliseOrgCodes(typeof kinde.getUserOrganizations === "function" ? kinde.getUserOrganizations() : getClaimValue("org_codes", "id_token"));
+    } catch {
+      organizations = normaliseOrgCodes(getClaimValue("org_codes", "id_token"));
+    }
+
+    let organization = "";
+    try {
+      const current = typeof kinde.getOrganization === "function" ? kinde.getOrganization() : null;
+      organization = String(current && (current.orgCode || current.code) || getClaimValue("org_code", "access_token") || "");
+    } catch {
+      organization = String(getClaimValue("org_code", "access_token") || "");
+    }
+
+    // Kinde does not expose a standard getGroups() helper in this SDK. If configured,
+    // a groups custom claim can be read from the ID or access token.
+    let groupRaw = getClaimValue(groupClaimName, "id_token");
+    if (groupRaw == null) groupRaw = getClaimValue(groupClaimName, "access_token");
+
+    accessMeta = {
+      roles,
+      permissions,
+      orgCodes: organizations,
+      orgCode: organization,
+      groups: asList(groupRaw)
+    };
+  };
+
   const show = name => {
     views.forEach(v => { v.hidden = v.dataset.view !== name; });
-    document.title = `${TITLES[name]} — ${SITE}`;
-    $$("[data-seg]").forEach(a => {
+    document.title = `${TITLES[name] || SITE} — ${SITE}`;
+    $$('[data-seg]').forEach(a => {
       if (a.dataset.seg === name) a.setAttribute("aria-current", "page");
       else a.removeAttribute("aria-current");
     });
@@ -60,14 +191,14 @@
   };
 
   const currentRoute = () => {
-    const m = location.hash.match(/^#\/(login|register|dashboard)\/?$/);
-    return m ? m[1] : null;
+    const match = location.hash.match(/^#\/(login|register|dashboard|verify)\/?$/);
+    return match ? match[1] : null;
   };
 
   const describeError = (code, description) => {
-    const c = String(code || "").toLowerCase();
-    if (c === "access_denied") return { message: "Sign-in was cancelled. You can try again whenever you're ready." };
-    if (c === "err_code_exchange" || c === "err_state_parse") {
+    const codeLower = String(code || "").toLowerCase();
+    if (codeLower === "access_denied") return { message: "Sign-in was cancelled. You can try again whenever you're ready." };
+    if (codeLower === "err_code_exchange" || codeLower === "err_state_parse") {
       return { message: "We couldn't finish signing you in. Please try again.", detail: description || code };
     }
     return { message: "Something went wrong while signing you in. Please try again.", detail: description || code };
@@ -82,34 +213,111 @@
   const syncAuth = async () => {
     authed = false;
     user = null;
+    emailVerified = null;
+    accessMeta = { roles: [], permissions: [], orgCodes: [], orgCode: "", groups: [] };
     if (!kinde) return;
     authed = await kinde.isAuthenticated();
     if (!authed) return;
+
     try { user = (await kinde.getUserProfile()) || kinde.getUser(); }
     catch { try { user = kinde.getUser(); } catch { user = null; } }
+
+    const claim = getClaimValue("email_verified", "id_token");
+    emailVerified = toBooleanOrNull(claim != null ? claim : user && user.email_verified);
+    await loadAccessMeta();
+  };
+
+  const tagList = (selector, items, emptyText, displayFn = displayRole) => {
+    const container = $(selector);
+    if (!container) return;
+    container.replaceChildren();
+    const visible = (items || []).map(displayFn).filter(Boolean);
+    if (!visible.length) {
+      const span = document.createElement("span");
+      span.className = "nxt-muted-chip";
+      span.textContent = emptyText;
+      container.append(span);
+      return;
+    }
+    visible.slice(0, 8).forEach(label => {
+      const span = document.createElement("span");
+      span.className = "nxt-chip";
+      span.textContent = label;
+      container.append(span);
+    });
+    if (visible.length > 8) {
+      const span = document.createElement("span");
+      span.className = "nxt-muted-chip";
+      span.textContent = `+${visible.length - 8} more`;
+      container.append(span);
+    }
+  };
+
+  const getPlanName = roles => {
+    const keys = (roles || []).map(keyForRole).filter(Boolean).map(x => x.toLowerCase());
+    const mapping = Object.entries(planRoleMap);
+    const match = mapping.find(([roleKey]) => keys.includes(String(roleKey).toLowerCase()));
+    return match ? String(match[1]) : "";
   };
 
   const fillDashboard = () => {
-    const email = (user && user.email) || "";
-    const name = (user && user.given_name) || email.split("@")[0] || "member";
-    $("#dashName").textContent = name;
-    $("#dashEmail").textContent = email;
-    $("#avatar").textContent = (name.trim()[0] || "?").toUpperCase();
-    const note = $("#dashNote");
-    if (welcome) {
-      note.textContent = welcome === "register"
-        ? "Account created. Welcome to NxTech Club!"
-        : "Welcome back. You're signed in.";
-      note.hidden = false;
-    } else {
-      note.hidden = true;
+    const email = String(user && user.email || "");
+    const name = String(user && (user.given_name || user.name) || email.split("@")[0] || "member");
+    safeText("#dashName", name);
+    safeText("#dashEmail", email);
+    safeText("#avatar", (name.trim()[0] || "?").toUpperCase());
+    safeText("#dashOrganization", accessMeta.orgCode || "Personal workspace");
+    safeText("#dashOrgDetail", accessMeta.orgCodes.length
+      ? `${accessMeta.orgCodes.length} organization${accessMeta.orgCodes.length === 1 ? "" : "s"} available to your account.`
+      : "No organization membership is assigned yet.");
+
+    const verified = emailVerified === true;
+    const verificationText = verified ? "Email verified" : emailVerified === false ? "Verification pending" : "Signed in";
+    const verificationPill = $("#dashVerificationPill");
+    if (verificationPill) {
+      verificationPill.textContent = verificationText;
+      verificationPill.classList.toggle("is-verified", verified);
+      verificationPill.classList.toggle("is-pending", emailVerified === false);
     }
+    safeText("#dashAccountStatus", verificationText);
+    safeText("#dashVerificationDetail", verified
+      ? "Kinde confirms this email address is verified."
+      : emailVerified === false
+        ? "Verify your email before using member features."
+        : "Your NxtSpace sign-in session is active.");
+
+    const planName = getPlanName(accessMeta.roles);
+    safeText("#dashPlan", planName || "Not assigned");
+    safeText("#dashPlanDetail", planName
+      ? `Matched from your Kinde role mapping (${accessMeta.roles.map(keyForRole).filter(Boolean).join(", ")}).`
+      : "Create/assign a role and map its exact role key in kinde-config.js.");
+    safeText("#dashPlanHero", planName ? `${planName} plan detected` : "Plan setup pending");
+
+    tagList("#dashRoles", accessMeta.roles, "No roles returned");
+    tagList("#dashPermissions", accessMeta.permissions, "No permissions returned", item => typeof item === "string" ? item : String(item && (item.key || item.name) || ""));
+    tagList("#dashGroups", accessMeta.groups, "No groups claim detected", item => typeof item === "string" ? item : String(item && (item.name || item.key || item.id) || ""));
+
+    const note = $("#dashNote");
+    if (note) {
+      if (welcome) {
+        note.textContent = welcome === "register"
+          ? (verified ? "Your email is verified and your NxtSpace account is ready. Welcome!" : "Welcome to NxtSpace! Your account session is ready.")
+          : "Welcome back. You're signed in to NxtSpace.";
+        note.hidden = false;
+      } else {
+        note.hidden = true;
+      }
+    }
+  };
+
+  const fillVerify = () => {
+    safeText("#verifyEmailAddress", user && user.email || "");
   };
 
   const fillSetup = () => {
     const msg = $("#setupMsg"), steps = $("#setupSteps");
     if (onFile) {
-      msg.textContent = "Sign-in can't run from a file on your computer. Serve this folder over http, then open the account page from that address.";
+      msg.textContent = "Sign-in can't run from a file on your computer. Serve this folder over HTTP, then open the account page from that address.";
       steps.replaceChildren();
       const li = document.createElement("li");
       li.append("In this folder, run ");
@@ -122,69 +330,73 @@
       steps.append(li);
       return;
     }
-    msg.textContent = "Finish the Kinde setup below to use the NxTech login and registration screens as the starting point.";
-    $("#setupUrl").textContent = redirectUri;
+    msg.textContent = "Finish connecting Kinde to use the NxtSpace login and registration screens.";
+    safeText("#setupUrl", redirectUri);
   };
 
-  /* ---------- rendering ---------- */
+  /* ---------- route rendering ---------- */
   function render() {
     if (!configured) { fillSetup(); show("setup"); return; }
     if (failure) {
-      $("#errorMsg").textContent = failure.message;
-      const d = $("#errorDetail");
-      d.textContent = failure.detail || "";
-      d.hidden = !failure.detail;
+      safeText("#errorMsg", failure.message);
+      const detail = $("#errorDetail");
+      if (detail) {
+        detail.textContent = failure.detail || "";
+        detail.hidden = !failure.detail;
+      }
       show("error");
       return;
     }
     if (!kinde) { show("loading"); return; }
 
     let route = currentRoute() || (authed ? "dashboard" : "login");
-    if (route === "dashboard" && !authed) route = "login";
-    if (authed && (route === "login" || route === "register")) route = "dashboard";
-    if (location.hash !== "#/" + route) history.replaceState(null, "", location.pathname + location.search + "#/" + route);
+    if (!authed && (route === "dashboard" || route === "verify")) route = "login";
+    if (authed && emailVerified === false) route = "verify";
+    else if (authed && (route === "login" || route === "register" || route === "verify")) route = "dashboard";
 
+    if (location.hash !== "#/" + route) history.replaceState(null, "", location.pathname + location.search + "#/" + route);
     if (route === "dashboard") fillDashboard();
+    if (route === "verify") fillVerify();
     show(route);
   }
 
-  /* ---------- starting login / sign-up ---------- */
+  /* ---------- sign-in and sign-up ---------- */
   const resetButtons = () => {
-    $$("form[data-form] button[type=submit]").forEach(b => {
-      b.disabled = false;
-      if (b.dataset.label) b.textContent = b.dataset.label;
+    $$('form[data-form] button[type="submit"]').forEach(button => {
+      button.disabled = false;
+      if (button.dataset.label) button.textContent = button.dataset.label;
     });
   };
 
   const start = async (kind, form) => {
     const input = form.elements.email;
-    const err = $(".err", form);
+    const error = $(".err", form);
     const email = input.value.trim();
-    err.textContent = "";
+    error.textContent = "";
     if (!email || !EMAIL_RE.test(email)) {
-      err.textContent = "Enter a valid email address.";
+      error.textContent = "Enter a valid email address.";
       input.focus();
       return;
     }
     if (!kinde) return;
 
-    const btn = $("button[type=submit]", form);
-    btn.dataset.label = btn.textContent;
-    btn.disabled = true;
-    btn.textContent = "Taking you to secure sign-in…";
+    const button = $('button[type="submit"]', form);
+    button.dataset.label = button.textContent;
+    button.disabled = true;
+    button.textContent = "Opening secure sign-in…";
 
     const options = {
       app_state: { intent: kind },
-      connectionId: emailConnectionId
+      connectionId: emailConnectionId,
+      loginHint: email
     };
-    if (email) options.loginHint = email;
     try {
       if (kind === "register") await kinde.register(options);
       else await kinde.login(options);
-    } catch (e) {
-      console.error(e);
+    } catch (err) {
+      console.error(err);
       resetButtons();
-      err.textContent = "We couldn't start sign-in. Please try again.";
+      error.textContent = "We couldn't start sign-in. Please check your connection and try again.";
     }
   };
 
@@ -192,49 +404,63 @@
   const onRedirect = (_user, appState) => {
     const intent = appState && appState.intent;
     welcome = intent === "register" ? "register" : "login";
-    // If this fires after start-up has finished, refresh and show the dashboard.
-    if (kinde) syncAuth().then(() => go("dashboard"));
+    if (kinde) syncAuth().then(() => go(emailVerified === false ? "verify" : "dashboard")).catch(err => {
+      console.error("[account] could not refresh session after Kinde redirect:", err);
+      render();
+    });
   };
+
   const onError = props => {
     const code = props && props.error;
-    // A stale or expired session on page load isn't a sign-in failure: the visitor just sees the login page.
     if (code === "ERR_GET_USER_PROFILE") {
       console.warn("[account] couldn't restore the previous session:", props.errorDescription);
       return;
     }
-    if (failure) return; // keep the first message, it's usually the clearest
+    if (failure) return;
     setFailure(code, props && props.errorDescription);
   };
 
-  /* ---------- start-up ---------- */
+  /* ---------- startup ---------- */
   const cleanUrl = () => {
-    const u = new URL(location.href);
+    const url = new URL(location.href);
     let changed = false;
-    ["code", "state", "error", "error_description"].forEach(k => { if (u.searchParams.has(k)) { u.searchParams.delete(k); changed = true; } });
-    if (changed) history.replaceState(null, "", u.pathname + (u.search || "") + u.hash);
+    ["code", "state", "error", "error_description"].forEach(key => {
+      if (url.searchParams.has(key)) { url.searchParams.delete(key); changed = true; }
+    });
+    if (changed) history.replaceState(null, "", url.pathname + (url.search || "") + url.hash);
   };
 
   const init = async () => {
-    $$("form[data-form]").forEach(form => {
-      form.addEventListener("submit", e => { e.preventDefault(); start(form.dataset.form, form); });
+    $$('form[data-form]').forEach(form => {
+      form.addEventListener("submit", event => { event.preventDefault(); start(form.dataset.form, form); });
     });
-    $("#logoutBtn").addEventListener("click", async function () {
-      this.disabled = true;
-      try { await kinde.logout(); } catch (e) { console.error(e); this.disabled = false; }
-    });
-    $("#retryBtn").addEventListener("click", () => {
+
+    const logout = async button => {
+      if (button) button.disabled = true;
+      try {
+        if (kinde) await kinde.logout();
+        else location.href = `${redirectUri}#/login`;
+      } catch (err) {
+        console.error(err);
+        if (button) button.disabled = false;
+      }
+    };
+
+    $("#logoutBtn")?.addEventListener("click", function () { logout(this); });
+    $("#verifyLogoutBtn")?.addEventListener("click", function () { logout(this); });
+    $("#retryBtn")?.addEventListener("click", () => {
       failure = null;
       if (kinde) go("login"); else location.reload();
     });
+
     window.addEventListener("hashchange", render);
-    // Coming back with the browser's Back button from Kinde: undo the "redirecting" state.
-    window.addEventListener("pageshow", e => { if (e.persisted) resetButtons(); });
+    window.addEventListener("pageshow", event => { if (event.persisted) resetButtons(); });
 
     if (!configured) { render(); return; }
     show("loading");
 
-    const qs = new URLSearchParams(location.search);
-    if (qs.get("error")) failure = describeError(qs.get("error"), qs.get("error_description"));
+    const query = new URLSearchParams(location.search);
+    if (query.get("error")) failure = describeError(query.get("error"), query.get("error_description"));
 
     const factory = window.createKindeClient && (window.createKindeClient.default || window.createKindeClient);
     if (typeof factory !== "function") {
@@ -254,10 +480,10 @@
         on_error_callback: onError
       });
       await syncAuth();
-    } catch (e) {
-      console.error(e);
+    } catch (err) {
+      console.error(err);
       kinde = null;
-      failure = { message: "We couldn't reach the sign-in service. Please try again in a moment.", detail: String(e && e.message || e) };
+      failure = { message: "We couldn't reach the sign-in service. Please try again in a moment.", detail: String(err && err.message || err) };
     }
     cleanUrl();
     render();
