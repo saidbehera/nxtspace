@@ -1,13 +1,22 @@
-
-window.NXTECH = {
+window.NXTSPACE = {
   kinde: {
     clientId: "d7be002a9015406896d8146b75925b68",
-
-    domain: "https://auth.nxtspace.com",
-
+    domain: "https://auth.nxtspace.com", // Or your Kinde custom domain
     redirectUri: "http://nxtspace.me/account.html",
+    apiBaseUrl: "https://nxtapi.appwrite.network",
+    useLocalStorage: false,
 
-    useLocalStorage: false
+    planRoleMap: {
+      "nxtspace_free": "plan0",
+      "nxtspace_standard": "plan1",
+      "nxtspace_pro": "plan2"
+    },
 
+    groupClaimName: "groups",
+
+    planCheckoutUrls: {
+      standard: "",
+      pro: ""
+    }
   }
 };
