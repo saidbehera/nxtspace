@@ -396,13 +396,13 @@
         await refreshOnboardingStatus({ showMessage: true });
         verificationPollingEnabled = false; go(requiredRoute()); return;
       }
-      if (!data.url || typeof data.url !== "string") throw new Error("Didit did not return a verification link.");
+      if (!data.verificationUrl || typeof data.verificationUrl !== "string") throw new Error("Didit did not return a verification link.");
       onboarding.verificationStatus = data.status || "Pending";
       diditMessage = "Complete the verification steps in Didit, then return here. We’ll update this page when Didit confirms the result.";
-      if (fallback) { fallback.href = data.url; fallback.hidden = false; fallback.dataset.sessionUrl = data.url; }
+      if (fallback) { fallback.href = data.verificationUrl; fallback.hidden = false; fallback.dataset.sessionUrl = data.verificationUrl; }
       verificationPollingEnabled = true;
       if (popup) {
-        try { popup.location.href = data.url; }
+        try { popup.location.href = data.verificationUrl; }
         catch { diditMessage += " If the new tab did not open, use the verification link below."; }
       } else {
         diditMessage += " Your browser blocked the new tab; use the link below to continue.";
