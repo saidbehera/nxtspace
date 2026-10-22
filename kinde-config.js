@@ -1,7 +1,7 @@
 window.NXTSPACE = {
   kinde: {
     clientId: "d7be002a9015406896d8146b75925b68",
-    domain: "https://auth.nxtspace.com", // Or your Kinde custom domain
+    domain: "https://auth.nxtspace.me", 
     redirectUri: "http://nxtspace.me/account.html",
     apiBaseUrl: "https://nxtapi.appwrite.network",
     useLocalStorage: false,
